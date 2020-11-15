@@ -38,6 +38,10 @@ DATABASE_PORT=
 DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE_NAME=
+
+; CLA_AUTH
+CLA_AUTH_HOST=
+CLA_AUTH_IDENTIFIER=
 ```
 
 Prenez soin dans la configuration du projet de bien sélectionner l'environnement de développement (`cla_votes.settings.development`) ou de production (`cla_votes.settings.production`) :
