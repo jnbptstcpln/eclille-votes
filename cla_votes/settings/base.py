@@ -29,12 +29,15 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    # Django's built-in apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # cla_votes' apps
+    'cla_auth.apps.ClaAuthConfig',
 ]
 
 MIDDLEWARE = [
