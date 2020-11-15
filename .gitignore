@@ -1,4 +1,5 @@
-.idea
+/.idea
 settings.ini
 migrations
-venv
+/venv
+/static
