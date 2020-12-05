@@ -12,4 +12,4 @@ class AbstractPublicView(View):
 class IndexPublicView(AbstractPublicView):
 
     def get(self, req):
-        return render(req, "cla_public")
+        return render(req, "cla_public/index.html")

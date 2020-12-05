@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block page_title %}{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Eczar&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="{% static 'app/img/logo_500.png' %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'normalize/normalize.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'aquila2/aquila2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/extensions.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/style.css' %}">
+    <style>
+        .badge.badge-warning {
+            color: white;
+        }
+    </style>
+    {% block style %}{% endblock %}
+    <script defer src="{% static 'fontawesome/js/all.min.js' %}"></script>
+</head>
+<body>
+
+<div class="vh-100">
+    <div class="topnav-container">
+        <nav class="topnav">
+            <div>
+                <div class="brand">
+                    <span>
+                        <span class="cla">Centrale Lille Associations</span>
+                        <span>Comité électoral</span>
+                    </span>
+                    <span class="mobile">CE</span>
+                </div>
+                <ul>
+                    <li>
+                        <a href="#">Accueil</a>
+                    </li>
+                    <li>
+                        <a href="#">Campagnes</a>
+                    </li>
+                    <li>
+                        <a href="#">Archives</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.autocomplete.min.js' %}"></script>
+<script src="{% static 'app/extensions.js' %}"></script>
+<script src="{% static 'app/bootstrap.js' %}"></script>
+{% block body_js %}{% endblock %}
+</body>
+</html>

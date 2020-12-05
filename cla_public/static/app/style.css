@@ -1,0 +1,107 @@
+/* ===== VARIABLE ===== */
+* {
+    --container-width: 1000px;
+}
+
+/* ===== TYPOGRAPHY ===== */
+* {
+    font-family: Montserrat, sans-serif;
+    --color-blue-primary: #4881e9;
+    --color-blue-secondary: #71a1f5;
+    --color-blue-tertiary: #0d49b2;
+
+    --color-blue: var(--color-blue-primary);
+    --color-red: #ff464a
+}
+
+h1, h2, h3 {
+    font-family: "Eczar", serif;
+}
+
+/* ===== NAVIGATION ===== */
+div.topnav-container {
+    border-top: 2px solid var(--color-red);
+    border-bottom: 2px solid var(--color-red);
+}
+nav.topnav {
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    background-color: #4881e9;
+    color: white;
+    font-size: 1.1em;
+    padding: 5px 5px;
+}
+
+nav.topnav > div {
+    display: flex;
+    justify-content: space-between;
+    max-width: var(--container-width);
+    width: 100%;
+    margin: 0 auto;
+}
+nav.topnav > div .brand {
+    display: flex;
+    font-weight: 600;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    align-items: center;
+    justify-items: center;
+}
+nav.topnav > div .brand span.mobile {
+    display: none;
+    width: 50px;
+}
+nav.topnav > div .brand span.cla {
+    display: block;
+    font-weight: 400;
+    font-size: 0.4em;
+    letter-spacing: 0.1rem;
+    color: #f1f1f1;
+}
+@media (max-width: 1000px) {
+    nav.topnav > div .brand {
+        font-size: 1em;
+        margin-left: 10px;
+    }
+    nav.topnav > div .brand span.cla {
+        font-size: 0.05em;
+        letter-spacing: 0.03rem;
+    }
+}
+@media (max-width: 650px) {
+    nav.topnav > div .brand span.mobile {
+        display: block;
+        font-size: 1.25em;
+    }
+    nav.topnav > div .brand span:not(.mobile) {
+        display: none;
+    }
+}
+
+nav.topnav > div > ul {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav.topnav > div > ul > li {
+    display: block;
+    text-align: center;
+    width: 150px;
+}
+
+nav.topnav > div > ul > li > a {
+    display: block;
+    color: white;
+    height: 100%;
+    width: 100%;
+    padding: 10px 10px;
+    text-transform: uppercase;
+    text-underline-offset: 2px;
+}
+
+nav.topnav > div > ul > li > a.active {
+    text-decoration: underline;
+}
