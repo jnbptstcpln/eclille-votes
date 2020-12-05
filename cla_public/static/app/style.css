@@ -18,18 +18,23 @@ h1, h2, h3 {
     font-family: "Eczar", serif;
 }
 
+@font-face {
+    font-family: "Steelfish";
+    src: url("/static/app/fonts/steelfish.ttf");
+}
+
 /* ===== NAVIGATION ===== */
 div.topnav-container {
-    border-top: 2px solid var(--color-red);
-    border-bottom: 2px solid var(--color-red);
+    border-top: 4px solid var(--color-red);
+    border-bottom: 4px solid var(--color-red);
 }
 nav.topnav {
-    border-top: 2px solid white;
-    border-bottom: 2px solid white;
+    border-top: 4px solid white;
+    border-bottom: 4px solid white;
     background-color: #4881e9;
     color: white;
     font-size: 1.1em;
-    padding: 5px 5px;
+    padding: 7px 5px;
 }
 
 nav.topnav > div {
@@ -81,6 +86,7 @@ nav.topnav > div .brand span.cla {
 nav.topnav > div > ul {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -89,19 +95,26 @@ nav.topnav > div > ul {
 nav.topnav > div > ul > li {
     display: block;
     text-align: center;
+    vertical-align: middle;
     width: 150px;
 }
 
 nav.topnav > div > ul > li > a {
-    display: block;
+    display: inline-block;
     color: white;
-    height: 100%;
-    width: 100%;
-    padding: 10px 10px;
+    font-size: 1.2em;
+    margin: auto;
+    width: auto;
+    padding: 5px 10px;
     text-transform: uppercase;
-    text-underline-offset: 2px;
+    text-decoration: none;
+    transition: background-color 300ms, color 300ms;
+}
+nav.topnav > div > ul > li > a:hover {
+    background-color: rgba(0,0,0,0.1);
 }
 
 nav.topnav > div > ul > li > a.active {
-    text-decoration: underline;
+    background-color: white;
+    color: var(--color-blue);
 }
