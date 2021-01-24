@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'normalize/normalize.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'aquila2/aquila2.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app/extensions.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/gradient.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app/style.css' %}">
     <style>
         .badge.badge-warning {
@@ -34,11 +35,10 @@
                         <span class="cla">Centrale Lille Associations</span>
                         <span>Comité électoral</span>
                     </span>
-                    <span class="mobile">CE</span>
                 </div>
                 <ul>
                     <li>
-                        <a href="#">Accueil</a>
+                        <a href="#" class="active">Accueil</a>
                     </li>
                     <li>
                         <a href="#">Campagnes</a>
@@ -47,6 +47,9 @@
                         <a href="#">Archives</a>
                     </li>
                 </ul>
+                <div class="mobile-menu-toggle">
+                    <a href="#"><i class="far fa-bars"></i></a>
+                </div>
             </div>
         </nav>
     </div>
