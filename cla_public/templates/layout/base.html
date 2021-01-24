@@ -29,7 +29,7 @@
 <div class="vh-100">
     <div class="topnav-container">
         <nav class="topnav">
-            <div>
+            <div class="container">
                 <div class="brand">
                     <span>
                         <span class="cla">Centrale Lille Associations</span>
@@ -46,6 +46,21 @@
                     <li>
                         <a href="#">Archives</a>
                     </li>
+                    {% if not request.user.is_authenticated %}
+                        <li class="button">
+                            <a href="{% url "cla_auth:login" %}">
+                                <span class="icon"><i class="fas fa-sign-in"></i></span>
+                                <span class="label">Connexion</span>
+                            </a>
+                        </li>
+                    {% elif request.user.is_staff %}
+                        <li class="button">
+                            <a href="/admin/">
+                                <span class="icon"><i class="fas fa-cogs"></i></span>
+                                <span class="label">Administration</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <div class="mobile-menu-toggle">
                     <a href="#"><i class="far fa-bars"></i></a>
