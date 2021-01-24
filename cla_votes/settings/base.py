@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     # cla_votes' apps
     'cla_auth.apps.ClaAuthConfig',
     'cla_public.apps.ClaPublicConfig',
+    'cla_bdx.apps.ClaBdxConfig',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,7 @@ STATIC_URL = '/static/'
 # CLA Auth
 CLA_AUTH_HOST = config("CLA_AUTH_HOST")
 CLA_AUTH_IDENTIFIER = config("CLA_AUTH_IDENTIFIER")
+
+
+# Login url
+LOGIN_REDIRECT_URL = "/auth/connexion"
