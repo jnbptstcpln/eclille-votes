@@ -1,2 +1,36 @@
 {% extends "layout/base.html" %}
 
+{% block content %}
+    <div class="p-2 mt-2 container">
+        <div class="card gradient-blue border-0">
+            <div class="card-body">
+                <div class="row max-width-750 m-auto">
+                    <div class="col-md-5 col-12">
+                        <div class="inline-svg-container w-100 height-200 mb-2 mb-sm-0" data-src="{% url "cla_public:box" %}"></div>
+                    </div>
+                    <div class="col-md-7 col-12 text-center">
+                        <div class="d-flex h-100 align-items-center justify-content-center">
+                            <div>
+                                <h2 class="fs-30px">Vote en cours...</h2>
+                                <p>Le scrutin est ouvert jusqu'à 18h</p>
+                                <a href="#" class="btn btn-outline-white">Voter !</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-2 mt-2 container">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="header-1">Le comité électoral</h2>
+                <p>Lorem ipsum</p>
+                <h3 class="header-2">Le comité électoral</h3>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
