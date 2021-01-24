@@ -16,14 +16,14 @@ class AbstractAuthView(View):
 class LoginAuthView(AbstractAuthView):
 
     def store_next(self, req):
-        req.session['next'] = req.GET.get('next', reverse('dashboard:index'))
+        req.session['next'] = req.GET.get('next', reverse('cla_public:index'))
 
     def get(self, req):
 
         self.store_next(req)
 
         if req.user.is_authenticated:
-            return redirect(req.session.get('next', reverse('dashboard:index')))
+            return redirect(req.session.get('next', reverse('cla_public:index')))
 
         cla_auth_url = "https://{}/authentification/{}".format(
             settings.CLA_AUTH_HOST,
@@ -38,7 +38,7 @@ class HandleAuthView(AbstractAuthView):
     def get(self, req):
 
         if req.user.is_authenticated:
-            return redirect(req.session.get('next', reverse('dashboard:index')))
+            return redirect(req.session.get('next', reverse('cla_public:index')))
 
         ticket = req.GET.get('ticket')
 
@@ -75,7 +75,7 @@ class HandleAuthView(AbstractAuthView):
 
             login(req, user)
 
-            return redirect(req.session.get('next', reverse('dashboard:index')))
+            return redirect(req.session.get('next', reverse('cla_public:index')))
 
         return render(req, "cla_auth/error.html")
 
