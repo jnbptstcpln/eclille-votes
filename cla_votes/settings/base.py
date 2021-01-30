@@ -117,6 +117,13 @@ USE_TZ = True
 STATIC_ROOT = BASE_DIR.joinpath('static')
 STATIC_URL = '/static/'
 
+# Media
+MEDIA_ROOT = BASE_DIR.joinpath('media')
+MEDIA_URL = '/media/'
+
+# Django resized
+DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
+
 # CLA Auth
 CLA_AUTH_HOST = config("CLA_AUTH_HOST")
 CLA_AUTH_IDENTIFIER = config("CLA_AUTH_IDENTIFIER")
