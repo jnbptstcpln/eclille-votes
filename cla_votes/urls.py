@@ -21,3 +21,5 @@ urlpatterns = [
     path('auth/', include("cla_auth.urls")),
     path('', include("cla_public.urls")),
 ]
+
+admin.site.site_header = "Site des votes"
