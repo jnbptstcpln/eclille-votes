@@ -48,7 +48,7 @@ class Campaign(models.Model):
         return self.starts_on.year
 
     def __str__(self):
-        return f"Campagne {self.type.upper()} {self.starts_on.year}"
+        return f"{self.type.upper()} {self.starts_on.year}"
 
 
 class List(models.Model):
@@ -76,7 +76,7 @@ class Vote(models.Model):
     ends_on = models.DateTimeField()
 
     def __str__(self):
-        return f"Campagne {self.campaign.type.upper()} {self.starts_on.year}"
+        return f"{self.campaign.type.upper()} {self.starts_on.year}"
 
 
 class VoteUser(models.Model):
