@@ -1,0 +1,64 @@
+{% extends "layout/base.html" %}
+
+{% block content %}
+    <div class="p-2 mt-2 container">
+        <div class="card gradient-blue border-0">
+            <div class="card-body">
+                <div class="row max-width-750 m-auto">
+                    <div class="col-md-5 col-12">
+                        <div class="inline-svg-container w-100 height-200 mb-2 mb-sm-0" data-src="{% url "cla_public:box" %}"></div>
+                    </div>
+                    <div class="col-md-7 col-12 text-center">
+                        <div class="d-flex h-100 align-items-center justify-content-center">
+                            <div>
+                                <h2 class="fs-30px">Vote en cours...</h2>
+                                <p>Le scrutin est ouvert jusqu'à 18h</p>
+                                <a href="#" class="btn btn-outline-white">Voter !</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-2 mt-2 container">
+        <div class="card">
+            <div class="card-body">
+                <p class="lead">
+                    Bienvenue sur le site du comité électoral de Centrale Lille Associations.
+                </p>
+                <p>
+                    A part d'ici, vous pourrez participer aux élections des futurs BDX et membres du conseil d'administration de Centrale Lille Associations.<br>
+                    Ce site regroupe aussi les archives des programmes des différents listes qui ont participé aux campagnes BDX.
+                </p>
+                <h4 class="header-2">Le comité électoral</h4>
+                <p>
+                    Le comité électoral de Centrale Lille Associations, composé de 6 membres désignés par vote du CA élèves, joue différents rôles dans l'encadrement des campagnes
+                    et l'organisation des élections :
+                </p>
+                <ul>
+                    <li>
+                        Suite à sa composition, il propose au vote du CA élèves le règlement qui encadredra le déroulement de chaque campagnes
+                    </li>
+                    <li>
+                        Pendant toute la période précédant les campagnes, il accompagne toutes les listes en répondant à leurs questions et en les
+                        guidant dans l'organisation de leurs campagnes
+                    </li>
+                    <li>
+                        Il veuille au respect du règlement par chaque liste, pendant toute la période des pré-campagne où une stricte confidentialité doit
+                        être respectée par les listes et pendant les campagnes elles mêmes
+                    </li>
+                    <li>
+                        En cas de manquement au respect du règlement, il proposera au vote du CA élèves des sanctions appropriées
+                    </li>
+                    <li>
+                        Il est chargé de l'organisation des votes, autant pour les campagnes BDX que pour l'élection du CA élèves, ainsi que du dévoilement du résultat
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
