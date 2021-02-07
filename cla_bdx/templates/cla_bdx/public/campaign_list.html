@@ -14,33 +14,44 @@
             </div>
             {% if campaign.should_display_lists %}
                 <div class="row mt-3">
-                    {% for list in campaign.lists.all %}
-                        <div class="col-sm-6">
-                            <div class="mt-3">
-                                {% if list.logo %}
-                                    <div style="max-width: 200px; margin: auto">
-                                        <div class=""
-                                             style="background: center / contain no-repeat url('{{ list.logo.url }}'); border-radius: 10px;/* width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
+                    {% with list_winner=campaign.vote.winner %}
+                        {% for list in campaign.lists.all %}
+                            <div class="col-sm-6">
+                                <div class="mt-3">
+                                    <div class="position-relative">
+                                        {% if list.logo %}
+                                            <div style="max-width: 200px; margin: auto">
+                                                <div class=""
+                                                     style="background: center / contain no-repeat url('{{ list.logo.url }}'); border-radius: 10px;/* width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
+                                            </div>
+                                        {% else %}
+                                            <div class="position-relative m-auto bg-gradient-gray-400 d-flex align-items-center justify-content-center" style="border-radius: 10px; max-width: 200px; margin: auto;">
+                                                <div class="top-0" style="/*width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
+                                                <div class="position-absolute text-white">
+                                                    <i class="fad fa-5x fa-shapes"></i>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                {% else %}
-                                    <div class="position-relative m-auto bg-gradient-gray-400 d-flex align-items-center justify-content-center" style="border-radius: 10px; max-width: 200px; margin: auto;">
-                                        <div class="top-0" style="/*width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
-                                        <div class="position-absolute text-white">
-                                            <i class="fad fa-5x fa-shapes"></i>
-                                        </div>
-                                    </div>
-                                {% endif %}
+                                </div>
+                                <div class="text-center mt-3">
+                                    <h4 class="mb-3">
+                                        {% if campaign.should_display_result %}
+                                            {% if list == list_winner %}
+                                                <span style="color: var(--color-red); margin-right: 2px"><i class="fas fa-crown"></i></span>
+                                            {% endif %}
+                                        {% endif %}
+                                        {{ list.name }}
+                                    </h4>
+                                    {% if list.program %}
+                                        <a class="btn btn-outline-primary" href="{{ list.program.url }}" target="_blank">Programme électoral</a>
+                                    {% else %}
+                                        <a class="btn btn-outline-primary disabled">Programme non disponible</a>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="text-center mt-3">
-                                <h4 class="mb-3">{{ list.name }}</h4>
-                                {% if list.program %}
-                                    <a class="btn btn-outline-primary" href="{{ list.program.url }}" target="_blank">Programme électoral</a>
-                                {% else %}
-                                    <a class="btn btn-outline-primary disabled">Programme non disponible</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% endwith %}
                 </div>
             {% endif %}
 

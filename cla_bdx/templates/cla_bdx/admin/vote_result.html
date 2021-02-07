@@ -10,14 +10,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for list in campaign.lists.all %}
-                    {% with list_winner=campaign.vote.winner %}
+                {% with list_winner=campaign.vote.winner %}
+                    {% for list in campaign.lists.all %}
                         <tr>
                             <th {% if list_winner == list %}style="background: #ffffb5"{% endif %}>{{ list.name }}</th>
                             <td {% if list_winner == list %}style="background: #ffffb5; font-weight: 600"{% endif %}>{{ list.votes_binary }}</td>
                         </tr>
-                    {% endwith %}
-                {% endfor %}
+                    {% endfor %}
+                {% endwith %}
                 <tr>
                     <th>Vote blancs</th>
                     <td>{{ campaign.vote.blank_votes }}</td>
