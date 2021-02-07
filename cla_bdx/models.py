@@ -97,6 +97,7 @@ class List(models.Model):
 
     class Meta:
         verbose_name = "Liste"
+        ordering = "name",
 
     campaign = models.ForeignKey(Campaign, related_name="lists", on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name="Nom")
