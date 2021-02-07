@@ -97,6 +97,7 @@ class List(models.Model):
 
     class Meta:
         verbose_name = "Liste"
+        ordering = "name",
 
     campaign = models.ForeignKey(Campaign, related_name="lists", on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name="Nom")
@@ -158,8 +159,6 @@ class Vote(models.Model):
         participation_stats['Autre'] = self.total_votes - total
 
         return participation_stats
-
-
 
     def __str__(self):
         return f"{self.campaign.type.upper()} {self.campaign.school_year}/{self.campaign.school_year+1}"
