@@ -21,7 +21,7 @@
                             {% elif list_count == 2 %}
                                 <div class="col-sm-6">
                             {% elif list_count == 3 %}
-                                <div class="col-sm-4">
+                                <div class="col-md-4">
                             {% else %}
                                 <div class="col-sm-6">
                             {% endif %}
@@ -45,7 +45,7 @@
                                 <div class="text-center mt-3">
                                     <h4 class="mb-3">
                                         {% if campaign.should_display_result %}
-                                            {% if list == list_winner %}
+                                            {% if list.pk == list_winner.pk %}
                                                 <span style="color: var(--color-red); margin-right: 2px"><i class="fas fa-crown"></i></span>
                                             {% endif %}
                                         {% endif %}
