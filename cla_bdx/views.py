@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 
 from cla_votes.utils import current_school_year
-from cla_bdx.models import Campaign, List
+from cla_bdx.models import Campaign, List, CampaignRegulation
 from cla_bdx.forms import BdxVoteForm
 
 
@@ -24,12 +24,14 @@ class AbstractBdxView(View):
 class CurrentCampaignView(AbstractBdxView):
 
     def get(self, req):
+        campaign_regulation = CampaignRegulation.objects.filter(voted_on__gt=datetime.datetime(year=current_school_year(), month=9, day=1)).order_by("voted_on").first()
         current_campaigns = Campaign.objects.filter(starts_on__gt=datetime.datetime(year=current_school_year(), month=9, day=1)).order_by("starts_on")
         on_going_campaigns = Campaign.objects.filter(starts_on__lt=timezone.now(), ends_on__gt=timezone.now())
         return render(
             req,
             "cla_bdx/public/current.html",
             self.context({
+                'campaign_regulation': campaign_regulation,
                 'campaigns': current_campaigns,
                 'on_going_campaigns': on_going_campaigns
             })
