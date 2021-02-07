@@ -61,6 +61,16 @@ class HandleAuthView(AbstractAuthView):
 
             try:
                 user = User.objects.get(username=username)
+
+                # Update user's infos
+                user.first_name = payload.get('firstName')
+                user.last_name = payload.get('lastName')
+                user.email_name = payload.get('emailSchool')
+                user.save()
+                user.infos.promo = payload.get('promo')
+                user.infos.cursus = payload.get('cursus')
+                user.infos.save()
+
             except User.DoesNotExist:
                 # Create the user entity
                 user = User.objects.create(
@@ -71,7 +81,7 @@ class HandleAuthView(AbstractAuthView):
                     is_active=True,
                     password=""
                 )
-                user.infos = UserInfos.objects.create(user=user, promo=payload.get('promo'))
+                user.infos = UserInfos.objects.create(user=user, promo=payload.get('promo'), cursus=payload.get('cursus'))
 
             login(req, user)
 
