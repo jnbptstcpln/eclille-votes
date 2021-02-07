@@ -86,3 +86,8 @@ class CampaignAdmin(admin.ModelAdmin):
             )
         )
     vote_participation_stats.short_description = "Participation"
+
+
+@admin.register(CampaignRegulation)
+class CampaignRegulationAdmin(admin.ModelAdmin):
+    ordering = "-voted_on",

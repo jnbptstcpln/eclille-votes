@@ -27,6 +27,14 @@ class FilePath:
     def logo(cls, instance, filename):
         return cls._path(instance, ["cla_bdx", "logo"], filename)
 
+    @classmethod
+    def regulation(cls, instance, filename):
+        pathlist = ["cla_bdx", "regulation"]
+        ext = filename.split('.')[-1]
+        filename = "%s-%s.%s" % ("reglement", uuid.uuid4(), ext)
+        pathlist.append(filename)
+        return os.path.join(*pathlist)
+
 
 class CampaignManager(models.Manager):
 
@@ -172,3 +180,27 @@ class VoteUser(models.Model):
     vote = models.ForeignKey(Vote, related_name="votes", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE)
     voted_on = models.DateTimeField(auto_now=True, null=True)
+
+
+class CampaignRegulationManager(models.Manager):
+    pass
+
+
+class CampaignRegulation(models.Model):
+
+    objects = CampaignRegulationManager()
+
+    class Meta:
+        verbose_name = "Règlement des campagnes"
+
+    voted_on = models.DateField(verbose_name="Voté le")
+    file = models.FileField(upload_to=FilePath.regulation, null=True, blank=True, verbose_name="Fichier PDF")
+
+    @property
+    def school_year(self):
+        if 1 <= self.voted_on.month < 9:
+            return self.voted_on.year - 1
+        return self.voted_on.year
+
+    def __str__(self):
+        return f"Réglement des campagnes {self.school_year}/{self.school_year+1}"
