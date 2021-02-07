@@ -1,0 +1,97 @@
+{% extends "layout/base.html" %}
+
+{% block page_title %}
+    {{ campaign }} : Voter
+{% endblock %}
+
+{% block content %}
+    <div class="p-2 mt-2 container">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" style="max-width: 1000px" class="m-auto">
+                    {% csrf_token %}
+
+                    <h3 class="text-center header-2 mb-4">Campagne {{ campaign }}</h3>
+
+                    {% if campaign.should_display_lists %}
+                        <div class="row mt-3">
+                            {% for list in campaign.lists.all %}
+                                <div class="col-sm-6">
+                                    <div class="mt-3">
+                                        {% if list.logo %}
+                                            <div style="max-width: 200px; margin: auto">
+                                                <div class=""
+                                                     style="background: center / contain no-repeat url('{{ list.logo.url }}'); border-radius: 10px;/* width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
+                                            </div>
+                                        {% else %}
+                                            <div class="position-relative m-auto bg-gradient-gray-400 d-flex align-items-center justify-content-center" style="border-radius: 10px; max-width: 200px; margin: auto;">
+                                                <div class="top-0" style="/*width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
+                                                <div class="position-absolute text-white">
+                                                    <i class="fad fa-5x fa-shapes"></i>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <h4 class="mb-3">{{ list.name }}</h4>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <hr>
+
+                    <div class="max-width-500" style="margin: 2rem auto 0">
+                        {% if messages %}
+                            <div class="messages mt-4 mb-4">
+                                {% for msg in messages %}
+                                    <div class="alert alert-{{ msg.level_tag }} mb-2">
+                                        {{ msg.message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="form-group{% if field.errors %} is-invalid{% endif %}">
+
+                                <label for="{{ field.id_for_label }}" style="font-weight: 600">{{ field.label }}</label>
+
+                                {% if field.errors %}
+                                    <div class="invalid-feedback">
+                                        {% if field.errors|length > 1 %}
+                                            <ul>
+                                                {% for error in field.errors %}
+                                                    <li>{{ error|escape }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            {{ field.errors.0|escape }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <p>
+                            En cliquant sur "Voter", vous confirmez votre vote, sur lequel vous n'aurez plus aucun droit de modification.
+                        </p>
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-outline-primary">Voter</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

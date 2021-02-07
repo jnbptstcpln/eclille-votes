@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.utils import timezone
+from cla_votes.utils import current_school_year
 
 
 def cla_votes_context(request):
@@ -9,7 +9,6 @@ def cla_votes_context(request):
     context['project_version'] = settings.PROJECT_VERSION
 
     # School year
-    now = timezone.now()
-    context['school_year'] = now.year - 1 if 1 <= now.month < 9 else now.year
+    context['school_year'] = current_school_year()
 
     return context
