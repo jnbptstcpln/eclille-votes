@@ -160,8 +160,6 @@ class Vote(models.Model):
 
         return participation_stats
 
-
-
     def __str__(self):
         return f"{self.campaign.type.upper()} {self.campaign.school_year}/{self.campaign.school_year+1}"
 
