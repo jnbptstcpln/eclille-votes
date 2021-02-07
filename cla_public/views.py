@@ -24,13 +24,3 @@ class IndexPublicView(AbstractPublicView):
                 'on_going_campaign_vote': on_going_campaign_vote
             })
         )
-
-
-class BoxElectionSvgView(View):
-    def get(self, req):
-        return render(
-            req,
-            "components/box_election.svg",
-            {'election': "BDE 2021"},
-            content_type="image/svg+xml"
-        )
