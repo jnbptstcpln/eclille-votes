@@ -1,0 +1,49 @@
+{% for campaign in campaigns %}
+    {% if not campaign in exclude %}
+        <div class="border p-5 mb-3">
+            <div class="row">
+                <div class="col-sm-6 col-12 text-sm-left text-center">
+                    <h3>Campagnes {{ campaign.get_type_display }}</h3>
+                    <p class="mb-0">{{ campaign.starts_on|date:"d/m/Y" }} - {{ campaign.ends_on|date:"d/m/Y" }}</p>
+                </div>
+                <div class="col-sm-6 col-12 text-sm-right text-center mt-sm-0 mt-3">
+                    {% if campaign.should_display_vote %}
+                        <a href="{% url "cla_bdx:vote" campaign.type %}" class="btn btn-lg btn-outline-danger">Voter !</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% if campaign.should_display_lists %}
+                <div class="row mt-3">
+                    {% for list in campaign.lists.all %}
+                        <div class="col-sm-6">
+                            <div class="mt-3">
+                                {% if list.logo %}
+                                    <div style="max-width: 200px; margin: auto">
+                                        <div class=""
+                                             style="background: center / contain no-repeat url('{{ list.logo.url }}'); border-radius: 10px;/* width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
+                                    </div>
+                                {% else %}
+                                    <div class="position-relative m-auto bg-gradient-gray-400 d-flex align-items-center justify-content-center" style="border-radius: 10px; max-width: 200px; margin: auto;">
+                                        <div class="top-0" style="/*width: calc(min(7vw, 7vh) * 300 / 100);*/ padding-bottom: calc(100% / 1); max-width: 100%;"></div>
+                                        <div class="position-absolute text-white">
+                                            <i class="fad fa-5x fa-shapes"></i>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="text-center mt-3">
+                                <h4 class="mb-3">{{ list.name }}</h4>
+                                {% if list.program %}
+                                    <a class="btn btn-outline-primary" href="{{ list.program.url }}" target="_blank">Programme électoral</a>
+                                {% else %}
+                                    <a class="btn btn-outline-primary disabled">Programme non disponible</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
+    {% endif %}
+{% endfor %}

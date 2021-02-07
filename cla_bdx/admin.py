@@ -14,7 +14,7 @@ class CampaignAdmin(admin.ModelAdmin):
         model = List
 
     class VoteInline(admin.TabularInline):
-        fields = ['starts_on', 'ends_on', 'status', 'voters']
+        fields = ['starts_on', 'ends_on', 'status', 'voters', 'display_result_on']
         readonly_fields = ['status', 'voters']
         model = Vote
         extra = 0
@@ -34,16 +34,17 @@ class CampaignAdmin(admin.ModelAdmin):
                 return "En cours"
         status.short_description = "Statut"
 
-    fields = ('campaign_school_year', 'type', ('starts_on', 'ends_on'), 'vote_result')
-    readonly_fields = ['vote_result', 'campaign_school_year']
+    fields = ('campaign_school_year', 'type', ('starts_on', 'ends_on'), 'vote_result', 'vote_participation_stats')
+    readonly_fields = ['vote_result', 'vote_participation_stats', 'campaign_school_year']
     list_display = ('campaign_label', 'campaign_start', 'campaign_end', 'campaign_vote')
+    ordering = "-starts_on",
     inlines = [
         ListInline,
         VoteInline,
     ]
 
     def campaign_label(self, obj: Campaign):
-        return f"{obj.get_type_display()} {obj.starts_on.year}"
+        return f"{obj.school_year}/{obj.school_year+1} - {obj.get_type_display()}"
     campaign_label.short_description = 'Campagne'
 
     def campaign_school_year(self, obj: Campaign):
@@ -73,4 +74,15 @@ class CampaignAdmin(admin.ModelAdmin):
                 }
             )
         )
-    vote_result.short_description = "Résultat des votes"
+    vote_result.short_description = "Résultat"
+
+    def vote_participation_stats(self, obj: Campaign):
+        return mark_safe(
+            render_to_string(
+                "cla_bdx/admin/vote_participation_stats.html",
+                {
+                    'campaign': obj
+                }
+            )
+        )
+    vote_participation_stats.short_description = "Participation"

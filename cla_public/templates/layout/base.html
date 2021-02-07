@@ -38,13 +38,13 @@
                 </div>
                 <ul>
                     <li>
-                        <a href="#" class="active">Accueil</a>
+                        <a href="{% url "cla_public:index" %}" {% if active_navigation == "accueil" %}class="active"{% endif %}>Accueil</a>
                     </li>
                     <li>
-                        <a href="#">Campagnes</a>
+                        <a href="{% url "cla_bdx:current" %}" {% if active_navigation == "bdx" %}class="active"{% endif %}>Campagnes</a>
                     </li>
                     <li>
-                        <a href="#">Archives</a>
+                        <a href="{% url "cla_bdx:last" %}" {% if active_navigation == "archives" %}class="active"{% endif %}>Archives</a>
                     </li>
                     {% if not request.user.is_authenticated %}
                         <li class="button">

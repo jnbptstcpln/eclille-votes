@@ -1,0 +1,30 @@
+{% extends "layout/base.html" %}
+
+{% block page_title %}
+    {{ campaign }} : A voté
+{% endblock %}
+
+{% block content %}
+
+    <div style="height: calc(75vh)" class="d-flex align-items-center justify-content-center">
+        <div class="card">
+            <div class="card-body">
+                <div class="max-width-500 m-auto text-center p-3">
+                    <div class="alert alert-success mb-0">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="mr-2">
+                                <div>
+                                    <i class="far fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="mb-0">Votre vote a bien été enregistré !</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
