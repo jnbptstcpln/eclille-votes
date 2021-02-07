@@ -1,0 +1,29 @@
+{% extends "layout/base.html" %}
+
+{% block page_title %}
+    Campagnes BDX
+{% endblock %}
+
+{% block content %}
+
+    <div class="p-2 mt-2 container">
+        <div class="card">
+            <div class="card-body">
+                {% if campaigns_year %}
+                    {% for year, campaigns in campaigns_year.items %}
+                        <h3 class="header-2">Campagnes BDX {{ year }}/{{ year|add:1 }}</h3>
+                        {% include "cla_bdx/public/campaign_list.html" with campaigns=campaigns %}
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center">
+                        <p class="lead mb-0">
+                            Nos archives sont pour le moment vides !
+                        </p>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

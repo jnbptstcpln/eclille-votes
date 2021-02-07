@@ -5,23 +5,21 @@
             <table style="width: 100%">
                 <thead>
                 <tr>
-                    <th>Liste</th>
-                    <th>Nombre de voix</th>
+                    <th>Cursus</th>
+                    <th>Participation</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for list in campaign.lists.all %}
-                    {% with list_winner=campaign.vote.winner %}
-                        <tr>
-                            <th {% if list_winner == list %}style="background: #ffffb5"{% endif %}>{{ list.name }}</th>
-                            <td {% if list_winner == list %}style="background: #ffffb5; font-weight: 600"{% endif %}>{{ list.votes_binary }}</td>
-                        </tr>
-                    {% endwith %}
+                {% for cursus, votes in campaign.vote.participation_stats.items %}
+                    <tr>
+                        <th>
+                            {{ cursus }}
+                        </th>
+                        <td>
+                            {{ votes }}
+                        </td>
+                    </tr>
                 {% endfor %}
-                <tr>
-                    <th>Vote blancs</th>
-                    <td>{{ campaign.vote.blank_votes }}</td>
-                </tr>
                 </tbody>
                 <tfoot>
                 <tr>

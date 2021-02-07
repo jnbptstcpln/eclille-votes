@@ -22,6 +22,7 @@ b {
     font-weight: 500;
 }
 
+/*
 @media (max-width: 1000px) {
     h1 {
         font-size: 2em;
@@ -33,6 +34,7 @@ b {
         font-size: 1.15em;
     }
 }
+*/
 
 @font-face {
     font-family: "Steelfish";
