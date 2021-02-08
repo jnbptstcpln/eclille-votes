@@ -24,8 +24,8 @@ END:VTIMEZONE
 BEGIN:VEVENT
 DTSTAMP:{{ date_now|date:"Ymd" }}T{{ date_now|date:"Hms" }}Z
 UID:{{ date_now|date:"Ymd" }}T{{ date_now|date:"Hms" }}Z@votes.centralelilleassos.fr
-DTSTART;VALUE=DATE:{{ campaign.starts_on|date:"Ymd" }}
-DTEND;VALUE=DATE:{{ campaign.ends_on|date:"Ymd" }}
+DTSTART;VALUE=DATE:{{ campaign.calendar_starts_on|date:"Ymd" }}
+DTEND;VALUE=DATE:{{ campaign.calender_ends_on|date:"Ymd" }}
 SUMMARY:Campagnes {{ campaign }}
 END:VEVENT
 END:VCALENDAR

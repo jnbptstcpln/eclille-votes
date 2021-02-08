@@ -105,6 +105,14 @@ class Campaign(models.Model):
     def did_user_vote(self, user: User):
         return self.vote.votes.filter(user=user).count() > 0
 
+    @property
+    def calender_starts_on(self):
+        return self.starts_on
+
+    @property
+    def calender_ends_on(self):
+        return self.ends_on + timezone.timedelta(days=1)
+
     def __str__(self):
         return f"{self.type.upper()} {self.school_year}/{self.school_year+1}"
 
