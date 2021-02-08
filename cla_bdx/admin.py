@@ -69,7 +69,7 @@ class CampaignAdmin(admin.ModelAdmin):
 
     def vote_link(self, obj: Campaign):
         if obj.vote:
-            return mark_safe(f"<input value='https://{escape(settings.ALLOWED_HOSTS[0]+resolve_url('cla_bdx:vote', type=obj.type))}'>")
+            return mark_safe(f"<input class='vTextField' value='https://{escape(settings.ALLOWED_HOSTS[0]+resolve_url('cla_bdx:vote', type=obj.type))}'>")
         return "Aucun vote planifié"
     vote_link.short_description = 'Lien vers la page de vote'
 
