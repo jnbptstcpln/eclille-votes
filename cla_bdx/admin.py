@@ -71,7 +71,7 @@ class CampaignAdmin(admin.ModelAdmin):
         if obj.vote:
             return f"https://{settings.ALLOWED_HOSTS[0]}{resolve_url('cla_bdx:vote', type=obj.type)}"
         return "Aucun vote planifié"
-    campaign_vote.short_description = 'Lien vers la page de vote'
+    vote_link.short_description = 'Lien vers la page de vote'
 
     def vote_result(self, obj: Campaign):
         return mark_safe(
