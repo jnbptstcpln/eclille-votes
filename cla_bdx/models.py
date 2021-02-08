@@ -38,6 +38,11 @@ class FilePath:
 
 class CampaignManager(models.Manager):
 
+    def ongoing(self, type=None):
+        if type is not None:
+            return self.filter(type=type, starts_on__lt=timezone.now(), ends_on__gt=timezone.now()).last()
+        return self.filter(starts_on__lt=timezone.now(), ends_on__gt=timezone.now()).last()
+
     def vote_ongoing(self, type=None):
         if type is not None:
             return self.filter(type=type, vote__starts_on__lt=timezone.now(), vote__ends_on__gt=timezone.now()).last()
