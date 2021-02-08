@@ -50,7 +50,8 @@ class CampaignCalendarView(AbstractBdxView):
             self.context({
                 'campaign': campaign,
                 'date_now': timezone.now()
-            })
+            }),
+            content_type="text/calendar"
         )
 
 class LastCampaignView(AbstractBdxView):
