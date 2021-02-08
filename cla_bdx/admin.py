@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.shortcuts import resolve_url
 from django.utils.html import mark_safe
 from django.template.loader import render_to_string
+from django.conf import settings
 from django.utils import timezone
 
 from .models import *
@@ -34,8 +36,8 @@ class CampaignAdmin(admin.ModelAdmin):
                 return "En cours"
         status.short_description = "Statut"
 
-    fields = ('campaign_school_year', 'type', ('starts_on', 'ends_on'), 'vote_result', 'vote_participation_stats')
-    readonly_fields = ['vote_result', 'vote_participation_stats', 'campaign_school_year']
+    fields = ('campaign_school_year', 'type', ('starts_on', 'ends_on'), 'vote_link', 'vote_result', 'vote_participation_stats')
+    readonly_fields = ['vote_link', 'vote_result', 'vote_participation_stats', 'campaign_school_year']
     list_display = ('campaign_label', 'campaign_start', 'campaign_end', 'campaign_vote')
     ordering = "-starts_on",
     inlines = [
@@ -64,6 +66,12 @@ class CampaignAdmin(admin.ModelAdmin):
             return "Aucun vote planifié"
         return f"{obj.vote.starts_on.strftime('%d/%m/%Y')} : {obj.vote.starts_on.strftime('%Hh%M')} - {obj.vote.ends_on.strftime('%Hh%M')}"
     campaign_vote.short_description = 'Vote'
+
+    def vote_link(self, obj: Campaign):
+        if obj.vote:
+            return f"https://{settings.ALLOWED_HOSTS[0]}{resolve_url('cla_bdx:vote', type=obj.type)}"
+        return "Aucun vote planifié"
+    campaign_vote.short_description = 'Lien vers la page de vote'
 
     def vote_result(self, obj: Campaign):
         return mark_safe(
