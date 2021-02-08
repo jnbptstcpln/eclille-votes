@@ -1,0 +1,31 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//votes.centralelilleassociations.fr//Centrale Lille Associations
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Europe/Paris
+TZURL:http://tzurl.org/zoneinfo-outlook/Europe/Paris
+X-LIC-LOCATION:Europe/Paris
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:{{ date_now|date:"Ymd" }}T{{ date_now|date:"Hms" }}Z
+UID:{{ date_now|date:"Ymd" }}T{{ date_now|date:"Hms" }}Z@votes.centralelilleassos.fr
+DTSTART;VALUE=DATE:{{ campaign.calendar_starts_on|date:"Ymd" }}
+DTEND;VALUE=DATE:{{ campaign.calendar_ends_on|date:"Ymd" }}
+SUMMARY:Campagnes {{ campaign }}
+END:VEVENT
+END:VCALENDAR

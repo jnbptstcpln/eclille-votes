@@ -86,6 +86,9 @@ class Campaign(models.Model):
             return False
         return self.vote.display_result_on < timezone.now()
 
+    def should_display_calendar(self):
+        return self.ends_on > timezone.now()
+
     def can_user_vote(self, user: User):
         if self.type == Campaign.BDX.BDI:
             if not user.infos.is_from_iteem():
@@ -101,6 +104,14 @@ class Campaign(models.Model):
 
     def did_user_vote(self, user: User):
         return self.vote.votes.filter(user=user).count() > 0
+
+    @property
+    def calendar_starts_on(self):
+        return self.starts_on
+
+    @property
+    def calendar_ends_on(self):
+        return self.ends_on + timezone.timedelta(days=1)
 
     def __str__(self):
         return f"{self.type.upper()} {self.school_year}/{self.school_year+1}"

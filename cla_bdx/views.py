@@ -38,6 +38,24 @@ class CurrentCampaignView(AbstractBdxView):
         )
 
 
+class CampaignCalendarView(AbstractBdxView):
+
+    def get(self, req, campaign_pk):
+
+        campaign = get_object_or_404(Campaign, pk=campaign_pk)
+
+        return render(
+            req,
+            "cla_bdx/public/calendar.ics",
+            self.context({
+                'campaign': campaign,
+                'date_now': timezone.now()
+            }),
+
+            content_type="text/calendar"
+        )
+
+
 class LastCampaignView(AbstractBdxView):
 
     def get(self, req):
