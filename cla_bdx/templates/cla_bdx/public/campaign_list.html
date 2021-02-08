@@ -6,7 +6,7 @@
                     <h3>Campagnes {{ campaign.get_type_display }}</h3>
                     <p class="mb-0">
                         {{ campaign.starts_on|date:"d/m/Y" }} - {{ campaign.ends_on|date:"d/m/Y" }}
-                        {% if campaign.should_display_calendar %}<a href="{% url "cla_bdx:calendar" campaign.pk %}"><i class="fad fa-calendar-plus"></i></a>{% endif %}
+                        {% if campaign.should_display_calendar %}<a class="ml-2px" href="{% url "cla_bdx:calendar" campaign.pk %}"><i class="fad fa-calendar-plus"></i></a>{% endif %}
                     </p>
                 </div>
                 <div class="col-sm-6 col-12 text-sm-right text-center mt-sm-0 mt-3">
