@@ -32,3 +32,8 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "Site des votes"
+
+handler400 = 'cla_votes.error_views.error_400'
+handler403 = 'cla_votes.error_views.error_403'
+handler404 = 'cla_votes.error_views.error_404'
+handler500 = 'cla_votes.error_views.error_500'
