@@ -86,6 +86,9 @@ class Campaign(models.Model):
             return False
         return self.vote.display_result_on < timezone.now()
 
+    def should_display_calendar(self):
+        return self.ends_on > timezone.now()
+
     def can_user_vote(self, user: User):
         if self.type == Campaign.BDX.BDI:
             if not user.infos.is_from_iteem():
