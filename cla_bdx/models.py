@@ -164,7 +164,14 @@ class Vote(models.Model):
     def winner(self):
         if self.ends_on > timezone.now():
             return None
-        return self.campaign.lists.order_by("-votes_binary").first()
+
+        score, winner = -1, None
+        for list in self.campaign.lists.all():
+            if list.votes_binary > score:
+                score, winner = list.votes_binary, list
+            elif list.votes_binary == score:
+                winner = None
+        return winner
 
     @property
     def participation_stats(self):
