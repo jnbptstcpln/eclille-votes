@@ -1,0 +1,31 @@
+<div>
+    <div style="max-width: 500px;">
+        <h3 style="margin-bottom: 1rem">{{ election }}</h3>
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <th>Cursus</th>
+                <th>Participation</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cursus, votes in election.participation_stats.items %}
+                <tr>
+                    <th>
+                        {{ cursus }}
+                    </th>
+                    <td>
+                        {{ votes }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>{{ election.vote.total_votes }}</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

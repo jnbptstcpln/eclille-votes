@@ -26,6 +26,7 @@ urlpatterns = [
     path('auth/', include("cla_auth.urls")),
     path('', include("cla_public.urls")),
     path('', include("cla_bdx.urls")),
+    path('', include("cla_ca.urls")),
 ]
 
 if settings.DEBUG:
