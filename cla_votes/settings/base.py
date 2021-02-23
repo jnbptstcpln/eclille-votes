@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'cla_auth.apps.ClaAuthConfig',
     'cla_public.apps.ClaPublicConfig',
     'cla_bdx.apps.ClaBdxConfig',
+    'cla_ca.apps.ClaCaConfig',
 ]
 
 MIDDLEWARE = [

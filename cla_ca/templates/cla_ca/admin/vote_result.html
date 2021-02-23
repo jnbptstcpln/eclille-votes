@@ -1,0 +1,35 @@
+<div>
+    <div style="max-width: 500px;">
+        <h3 style="margin-bottom: 1rem">{{ election }}</h3>
+
+        {% for college, college_vote in election.candidates_by_colleges.items %}
+            <h4 style="margin-bottom: 1rem">Collège {{ college|upper }}</h4>
+            <table style="width: 100%; margin-bottom: 2rem">
+                <thead>
+                <tr>
+                    <th>Candidat</th>
+                    <th>Nombre de votes</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for candidate in college_vote.candidates %}
+                    <tr>
+                        <th>{{ candidate }}</th>
+                        <td>{{ candidate.votes }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>Vote blancs</th>
+                    <td>{{ college_vote.blank_votes }}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>{{ college_vote.total_votes }}</th>
+                </tr>
+                </tfoot>
+            </table>
+        {% endfor %}
+    </div>
+</div>
