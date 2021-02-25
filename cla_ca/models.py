@@ -77,7 +77,7 @@ class Election(models.Model):
         colleges = {}
         for college in UserInfos.Colleges.values:
             colleges[college] = {
-                'candidates': Candidate.objects.filter(election=self, college=college).order_by("votes"),
+                'candidates': Candidate.objects.filter(election=self, college=college).order_by("-votes"),
                 'blank_votes': self.blank_votes(college),
                 'total_votes': self.total_votes(college),
             }
