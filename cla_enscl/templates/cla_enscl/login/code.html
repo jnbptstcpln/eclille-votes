@@ -1,0 +1,73 @@
+{% extends "layout/base.html" %}
+
+{% block page_title %}
+    ENSCL : Connexion
+{% endblock %}
+
+{% block content %}
+    <div class="p-2 mt-2 container">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" style="max-width: 1000px" class="m-auto">
+                    {% csrf_token %}
+
+                    <h3 class="text-center header-2 mb-4">Accéder au vote</h3>
+                    <div style="max-width: 750px; margin: 2rem auto 0">
+
+                        <p class="text-center">
+                            Un code a été envoyé à l'adresse {{ user.email }}<br>
+                            Veuillez l'entrer ci-dessous pour continuer.
+                        </p>
+                        <p class="text-center mb-4">
+                            <a href="https://mail.ec-lille.fr" target="_blank">Accéder à mail.ec-lille.fr</a>
+                        </p>
+
+                        <div style="max-width: 500px; margin: auto">
+                            {% if messages %}
+                                <div class="messages mt-4 mb-4">
+                                    {% for msg in messages %}
+                                        <div class="alert alert-{{ msg.level_tag }} mb-2">
+                                            {{ msg.message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% for field in form %}
+                                <div class="form-group{% if field.errors %} is-invalid{% endif %}">
+
+                                    <label for="{{ field.id_for_label }}" style="font-weight: 600">{{ field.label }}</label>
+
+                                    {% if field.errors %}
+                                        <div class="invalid-feedback">
+                                            {% if field.errors|length > 1 %}
+                                                <ul>
+                                                    {% for error in field.errors %}
+                                                        <li>{{ error|escape }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% else %}
+                                                {{ field.errors.0|escape }}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+
+                                    {{ field }}
+
+                                    {% if field.help_text %}
+                                        <p class="help">{{ field.help_text|safe }}</p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-outline-primary">Continuer</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
