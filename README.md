@@ -32,6 +32,11 @@ Avant de lancer le projet, il faut mettre en place la configuration dans ``cla_v
 SECRET_KEY=random_string
 ALLOWED_HOSTS=host1,host2,...
 
+; Email
+EMAIL_HOST=
+EMAIL_LOGIN=
+EMAIL_PASSWORD=
+
 ; DATABASE
 DATABASE_HOST=
 DATABASE_PORT=
