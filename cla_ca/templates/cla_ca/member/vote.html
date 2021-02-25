@@ -20,7 +20,7 @@
                         Pour rappel l'élection est organisée par collège, vous élirez donc les candidats du collège <b>{{ request.user.infos.college|upper }}</b>.
                     </p>
 
-                    {% for college, college_vote in election.candidates_by_colleges_result.items %}
+                    {% for college, college_vote in election.candidates_by_colleges.items %}
 
                         <h4 class="header-2" style="margin: 2rem 0 1rem">Collège {{ college|upper }}</h4>
 
