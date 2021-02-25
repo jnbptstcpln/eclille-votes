@@ -1,0 +1,24 @@
+<div>
+    <div style="max-width: 500px;">
+        <h3 style="margin-bottom: 1rem">{{ election }}</h3>
+
+        {% for pole_name, items in election.results.items %}
+            <h4 style="margin-bottom: 1rem">{{ pole_name|upper }}</h4>
+            <table style="width: 100%; margin-bottom: 2rem">
+                <thead>
+                <tr>
+                    <th>Candidat</th>
+                    <th>Nombre de votes</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item, votes in items.items %}
+                    <tr>
+                        <th>{{ item }}</th>
+                        <td>{{ votes }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+</div>

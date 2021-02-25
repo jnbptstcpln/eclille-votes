@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include("cla_public.urls")),
     path('', include("cla_bdx.urls")),
     path('', include("cla_ca.urls")),
+    path('enscl/', include("cla_enscl.urls")),
 ]
 
 if settings.DEBUG:
