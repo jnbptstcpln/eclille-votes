@@ -94,6 +94,9 @@ class Election(models.Model):
             return self.votes.filter(college=college).count()*2
         return self.votes.count()*2
 
+    def total_voters(self):
+        return self.votes.count()
+
     @property
     def participation_stats(self):
         participation_stats = {c: 0 for c in CURSUS_ITEEM + CURSUS_CENTRALE}
