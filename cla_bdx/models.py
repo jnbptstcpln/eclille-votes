@@ -1,4 +1,5 @@
 import os
+import math
 import uuid
 
 from django.db import models
@@ -127,7 +128,15 @@ class List(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nom")
     logo = ResizedImageField(size=[500, 500], quality=90, upload_to=FilePath.logo, force_format="PNG", null=True, blank=True)
     program = models.FileField(upload_to=FilePath.program, null=True, blank=True, verbose_name="Programme")
+    penality = models.FloatField(default=0, verbose_name="Pourcentage de voix de pénalité")
     votes_binary = models.IntegerField(default=0)
+
+    @property
+    def votes_binary_final(self):
+        return self.votes_binary - math.ceil(self.campaign.vote.total_votes*self.penality*0.01)
+
+    def vote_penality(self):
+        return math.ceil(self.campaign.vote.total_votes*self.penality*0.01)
 
     def __str__(self):
         return f"{self.name} - {self.campaign.type.upper()} {self.campaign.school_year}/{self.campaign.school_year+1}"
@@ -167,9 +176,9 @@ class Vote(models.Model):
 
         score, winner = -1, None
         for list in self.campaign.lists.all():
-            if list.votes_binary > score:
-                score, winner = list.votes_binary, list
-            elif list.votes_binary == score:
+            if list.votes_binary_final > score:
+                score, winner = list.votes_binary_final, list
+            elif list.votes_binary_final == score:
                 winner = None
         return winner
 

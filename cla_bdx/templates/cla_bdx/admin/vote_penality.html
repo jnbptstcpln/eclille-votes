@@ -1,0 +1,36 @@
+<div>
+    <div style="max-width: 500px;">
+        {% if campaign.vote %}
+            <h3 style="margin-bottom: 1rem">Campagnes {{ campaign }}</h3>
+            <table style="width: 100%">
+                <thead>
+                <tr>
+                    <th>Liste</th>
+                    <th>Penalité</th>
+                    <th>Nombre de voix de pénalité</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% with list_winner=campaign.vote.winner %}
+                    {% for list in campaign.lists.all %}
+                        <tr>
+                            <th>{{ list.name }}</th>
+                            <td>{{ list.penality }}% &times;️ {{ campaign.vote.total_votes }} votes</td>
+                            <td>
+                                {{ list.vote_penality }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endwith %}
+                </tbody>
+            </table>
+            <p style="font-size: .75rem">
+                Le nombre de voix de pénalité est <b>l'arrondi supérieur</b> du calcul <code style="font-size: .75rem">sanction &times;️ nombre total de vote</code>
+            </p>
+        {% else %}
+            <div style="padding: 2rem; text-align: center; color: #454545">
+                Aucun vote n'a été associé à cette campagne
+            </div>
+        {% endif %}
+    </div>
+</div>
