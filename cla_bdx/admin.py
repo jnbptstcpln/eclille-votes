@@ -12,7 +12,7 @@ from .models import *
 class CampaignAdmin(admin.ModelAdmin):
 
     class ListInline(admin.TabularInline):
-        fields = ['name', 'logo', 'program']
+        fields = ['name', 'logo', 'program', 'penality']
         model = List
 
     class VoteInline(admin.TabularInline):
@@ -36,8 +36,8 @@ class CampaignAdmin(admin.ModelAdmin):
                 return "En cours"
         status.short_description = "Statut"
 
-    fields = ('campaign_school_year', 'type', ('starts_on', 'ends_on'), 'vote_link', 'vote_result', 'vote_participation_stats')
-    readonly_fields = ['vote_link', 'vote_result', 'vote_participation_stats', 'campaign_school_year']
+    fields = ('campaign_school_year', 'type', ('starts_on', 'ends_on'), 'vote_link', 'vote_result', 'vote_participation_stats', 'vote_penalities')
+    readonly_fields = ['vote_link', 'vote_result', 'vote_participation_stats', 'vote_penalities', 'campaign_school_year']
     list_display = ('campaign_label', 'campaign_start', 'campaign_end', 'campaign_vote')
     ordering = "-starts_on",
     inlines = [
@@ -72,6 +72,17 @@ class CampaignAdmin(admin.ModelAdmin):
             return mark_safe(f"<input class='vTextField' value='https://{escape(settings.ALLOWED_HOSTS[0]+resolve_url('cla_bdx:vote', type=obj.type))}'>")
         return "Aucun vote planifié"
     vote_link.short_description = 'Lien vers la page de vote'
+
+    def vote_penalities(self, obj: Campaign):
+        return mark_safe(
+            render_to_string(
+                "cla_bdx/admin/vote_penality.html",
+                {
+                    'campaign': obj
+                }
+            )
+        )
+    vote_penalities.short_description = "Pénalités"
 
     def vote_result(self, obj: Campaign):
         return mark_safe(

@@ -14,7 +14,12 @@
                     {% for list in campaign.lists.all %}
                         <tr>
                             <th {% if list_winner == list %}style="background: #ffffb5"{% endif %}>{{ list.name }}</th>
-                            <td {% if list_winner == list %}style="background: #ffffb5; font-weight: 600"{% endif %}>{{ list.votes_binary }}</td>
+                            <td {% if list_winner == list %}style="background: #ffffb5; font-weight: 600"{% endif %}>
+                                {{ list.votes_binary_final }}
+                                {% if list.votes_binary_final != list.votes_binary %}
+                                    ({{ list.votes_binary }} avant sanction)
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 {% endwith %}
