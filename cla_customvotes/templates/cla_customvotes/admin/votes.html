@@ -1,0 +1,37 @@
+<div>
+    <div style="max-width: 500px;">
+        <h3 style="margin-bottom: 1rem">{{ election }}</h3>
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Promo</th>
+                <th>Collège</th>
+                <th>Heure du vote</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for vote in election.votes.all %}
+                <tr>
+                    <td>
+                        {{ vote.user.last_name|upper }}
+                    </td>
+                    <td>
+                        {{ vote.user.first_name }}
+                    </td>
+                    <td>
+                        {{ vote.user.infos.promo }}
+                    </td>
+                    <td>
+                        {{ vote.user.infos.college.label }}
+                    </td>
+                    <td>
+                        {{ vote.voted_on }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
