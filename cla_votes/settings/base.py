@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'cla_bdx.apps.ClaBdxConfig',
     'cla_ca.apps.ClaCaConfig',
     'cla_enscl.apps.ClaEnsclConfig',
+    'cla_customvotes.apps.ClaCustomvotesConfig'
 ]
 
 MIDDLEWARE = [
@@ -94,6 +95,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

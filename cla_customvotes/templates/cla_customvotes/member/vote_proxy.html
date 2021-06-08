@@ -1,0 +1,79 @@
+{% extends "layout/base.html" %}
+
+{% block page_title %}
+    {{ election }} : Voter
+{% endblock %}
+
+{% block content %}
+    <div class="p-2 mt-2 container">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" style="max-width: 1000px" class="m-auto">
+                    {% csrf_token %}
+
+                    <h3 class="text-center header-2 mb-4">{{ election }}</h3>
+
+                    <p class="text-center mb-4">
+                        Vous êtes responsables de {{ proxy.total }} vote{{ proxy.total|pluralize }} par procuration.<br>
+                        Répartissez ces votes ci-dessous :
+                    </p>
+
+                    <div class="max-width-500" style="margin: 2rem auto 0">
+
+                        {% if messages %}
+                            <div class="messages mt-4 mb-4">
+                                {% for msg in messages %}
+                                    <div class="alert alert-{{ msg.level_tag }} mb-2">
+                                        {{ msg.message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="form-group{% if field.errors %} is-invalid{% endif %}">
+
+                                <label for="{{ field.id_for_label }}" style="font-weight: 600">{{ field.label }}</label>
+
+                                {% if field.errors %}
+                                    <div class="invalid-feedback">
+                                        {% if field.errors|length > 1 %}
+                                            <ul>
+                                                {% for error in field.errors %}
+                                                    <li>{{ error|escape }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            {{ field.errors.0|escape }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <p>
+                            En cliquant sur "Voter", vous confirmez votre vote, sur lequel vous n'aurez plus aucun droit de modification.
+                        </p>
+
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-outline-primary">Voter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if scroll %}
+        <script>
+            window.scrollTo(0, document.body.scrollHeight);
+        </script>
+    {% endif %}
+
+{% endblock %}

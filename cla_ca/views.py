@@ -81,7 +81,7 @@ class ElectionVoteView(AbstractCaView):
 
                 return render(
                     req,
-                    "cla_bdx/member/did_vote.html",
+                    "cla_ca/member/did_vote.html",
                     self.context({'election': election})
                 )
 

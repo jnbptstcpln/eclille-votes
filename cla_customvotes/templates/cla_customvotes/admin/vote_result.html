@@ -1,0 +1,37 @@
+<div>
+    <div style="max-width: 500px;">
+        <h3 style="margin-bottom: 1rem">{{ election }}</h3>
+        <table style="width: 100%; margin-bottom: 2rem">
+            <thead>
+            <tr>
+                <th>Candidat</th>
+                <th>Nombre de votes</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% with candidate_winner=election.winner %}
+                {% for candidate in election.candidates_results %}
+                    <tr {% if candidate == candidate_winner %}style="background: #ffffb5; color: black;"{% endif %}>
+                        <th>{{ candidate }}</th>
+                        <td>{{ candidate.votes }}</td>
+                    </tr>
+                {% endfor %}
+            {% endwith %}
+            <tr>
+                <th>Vote blancs</th>
+                <td>{{ election.blank_votes }}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>{{ election.total_votes }}
+                    {% with proxies_votes=election.total_proxies_votes %}
+                        {% if proxies_votes %}(dont {{ proxies_votes }} procuration{{ proxies_votes|pluralize }}){% endif %}
+                    {% endwith %}
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
