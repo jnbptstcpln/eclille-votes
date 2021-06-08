@@ -25,7 +25,7 @@ class LoginAuthView(AbstractAuthView):
         if req.user.is_authenticated:
             return redirect(req.session.get('next', reverse('cla_public:index')))
 
-        cla_auth_url = "http://{}/authentification/{}".format(
+        cla_auth_url = "https://{}/authentification/{}".format(
             settings.CLA_AUTH_HOST,
             settings.CLA_AUTH_IDENTIFIER
         )
@@ -42,7 +42,7 @@ class HandleAuthView(AbstractAuthView):
 
         ticket = req.GET.get('ticket')
 
-        cla_auth_url = "http://{}/authentification/{}/{}".format(
+        cla_auth_url = "https://{}/authentification/{}/{}".format(
             settings.CLA_AUTH_HOST,
             settings.CLA_AUTH_IDENTIFIER,
             requests.utils.quote(ticket)
