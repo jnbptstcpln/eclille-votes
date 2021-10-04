@@ -41,6 +41,7 @@ class Election(models.Model):
 
     starts_on = models.DateTimeField(verbose_name="Début de l'élection")
     ends_on = models.DateTimeField(verbose_name="Fin de l'élection")
+    anticipated = models.BooleanField(verbose_name="Election anticipée", default=False)
 
     @property
     def school_year(self):
@@ -54,10 +55,10 @@ class Election(models.Model):
     def did_user_vote(self, user: User):
         return self.votes.filter(user=user).count() > 0
 
-    def register_user(self, user: User):
+    def register_user(self, user: User, college):
         VoteUser.objects.create(
             vote=self,
-            college=user.infos.college,
+            college=college,
             user=user
         )
 
@@ -82,6 +83,11 @@ class Election(models.Model):
                 'total_votes': self.total_votes(college),
             }
         return colleges
+
+    def get_computed_user_college(self, user: User):
+        if self.anticipated:
+            return user.infos.college_before
+        return user.infos.college
 
     def blank_votes(self, college):
         total = self.votes.filter(college=college).count()*2

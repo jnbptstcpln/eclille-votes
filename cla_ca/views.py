@@ -28,7 +28,8 @@ class ElectionVoteView(AbstractCaView):
         if election.did_user_vote(req.user):
             return self.render_already_vote(election)
 
-        form = CaVoteForm(candidates=election.candidates.filter(college=req.user.infos.college))
+        college = election.get_computed_user_college()
+        form = CaVoteForm(candidates=election.candidates.filter(college=college))
 
         return render(
             req,
@@ -47,7 +48,8 @@ class ElectionVoteView(AbstractCaView):
         if election.did_user_vote(req.user):
             return self.render_already_vote(election)
 
-        form = CaVoteForm(req.POST, candidates=election.candidates.filter(college=req.user.infos.college))
+        college = election.get_computed_user_college()
+        form = CaVoteForm(req.POST, candidates=election.candidates.filter(college=college))
 
         if form.is_valid():
 
@@ -57,7 +59,7 @@ class ElectionVoteView(AbstractCaView):
             if candidate1_index == 0 or candidate1_index != candidate2_index:
 
                 # Register user vote
-                election.register_user(req.user)
+                election.register_user(req.user, college)
 
                 if candidate1_index > 0:
                     try:

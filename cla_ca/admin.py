@@ -15,7 +15,7 @@ class CampaignAdmin(admin.ModelAdmin):
         fields = ['first_name', 'last_name', 'college', 'cover_letter', 'photo']
         model = Candidate
 
-    fields = ('election_school_year', ('starts_on', 'ends_on'), 'vote_link', 'vote_result', 'vote_participation_stats')
+    fields = ('election_school_year', ('starts_on', 'ends_on'), 'anticipated', 'vote_link', 'vote_result', 'vote_participation_stats')
     readonly_fields = ['vote_link', 'vote_result', 'vote_participation_stats', 'election_school_year']
     list_display = ('election_label', 'election_school_year', 'election_start')
     ordering = "-starts_on",
