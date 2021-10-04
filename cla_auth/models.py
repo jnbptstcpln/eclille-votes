@@ -40,3 +40,16 @@ class UserInfos(models.Model):
             return self.Colleges.IE1_IE2
         elif self.promo == current_school_year()+5:
             return self.Colleges.IE1_IE2
+
+    @property
+    def college_before(self):
+        if self.promo <= current_school_year():
+            return self.Colleges.G3 if self.is_from_centrale() else self.Colleges.IE5
+        elif self.promo == current_school_year() + 1:
+            return self.Colleges.G2 if self.is_from_centrale() else self.Colleges.IE4
+        elif self.promo == current_school_year() + 2:
+            return self.Colleges.G1 if self.is_from_centrale() else self.Colleges.IE3
+        elif self.promo == current_school_year() + 3:
+            return self.Colleges.IE1_IE2
+        elif self.promo == current_school_year() + 4:
+            return self.Colleges.IE1_IE2
