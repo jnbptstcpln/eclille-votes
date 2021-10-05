@@ -28,7 +28,7 @@ class ElectionVoteView(AbstractCaView):
         if election.did_user_vote(req.user):
             return self.render_already_vote(election)
 
-        college = election.get_computed_user_college()
+        college = election.get_computed_user_college(req.user)
         form = CaVoteForm(candidates=election.candidates.filter(college=college))
 
         return render(
@@ -48,7 +48,7 @@ class ElectionVoteView(AbstractCaView):
         if election.did_user_vote(req.user):
             return self.render_already_vote(election)
 
-        college = election.get_computed_user_college()
+        college = election.get_computed_user_college(req.user)
         form = CaVoteForm(req.POST, candidates=election.candidates.filter(college=college))
 
         if form.is_valid():
