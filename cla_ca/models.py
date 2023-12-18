@@ -7,16 +7,19 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils import timezone
 
-from cla_votes.const import CURSUS_CENTRALE, CURSUS_ITEEM
+from cla_votes.const import CURSUS_CENTRALE, CURSUS_ITEEM, CURSUS_ENSCL
 from cla_auth.models import UserInfos
 
 
 class FilePath:
-
     @classmethod
     def _path(cls, instance, pathlist, filename):
-        ext = filename.split('.')[-1]
-        filename = "%s-%s.%s" % (slugify(f"{instance.first_name} {instance.last_name}"), uuid.uuid4(), ext)
+        ext = filename.split(".")[-1]
+        filename = "%s-%s.%s" % (
+            slugify(f"{instance.first_name} {instance.last_name}"),
+            uuid.uuid4(),
+            ext,
+        )
         pathlist.append(filename)
         return os.path.join(*pathlist)
 
@@ -26,17 +29,17 @@ class FilePath:
 
 
 class ElectionManager(models.Manager):
-
     def ongoing(self):
-        return self.filter(starts_on__lt=timezone.now(), ends_on__gt=timezone.now()).last()
+        return self.filter(
+            starts_on__lt=timezone.now(), ends_on__gt=timezone.now()
+        ).last()
 
 
 class Election(models.Model):
-
     objects = ElectionManager()
 
     class Meta:
-        ordering = '-starts_on',
+        ordering = ("-starts_on",)
         verbose_name = "Election"
 
     starts_on = models.DateTimeField(verbose_name="Début de l'élection")
@@ -46,7 +49,7 @@ class Election(models.Model):
     @property
     def school_year(self):
         if 1 <= self.starts_on.month < 9:
-            return self.starts_on.year-1
+            return self.starts_on.year - 1
         return self.starts_on.year
 
     def should_display_vote(self):
@@ -56,20 +59,18 @@ class Election(models.Model):
         return self.votes.filter(user=user).count() > 0
 
     def register_user(self, user: User, college):
-        VoteUser.objects.create(
-            vote=self,
-            college=college,
-            user=user
-        )
+        VoteUser.objects.create(vote=self, college=college, user=user)
 
     @property
     def candidates_by_colleges(self):
         colleges = {}
         for college in UserInfos.Colleges.values:
             colleges[college] = {
-                'candidates': Candidate.objects.filter(election=self, college=college).order_by("college", "first_name"),
-                'blank_votes': self.blank_votes(college),
-                'total_votes': self.total_votes(college),
+                "candidates": Candidate.objects.filter(
+                    election=self, college=college
+                ).order_by("college", "first_name"),
+                "blank_votes": self.blank_votes(college),
+                "total_votes": self.total_votes(college),
             }
         return colleges
 
@@ -78,9 +79,11 @@ class Election(models.Model):
         colleges = {}
         for college in UserInfos.Colleges.values:
             colleges[college] = {
-                'candidates': Candidate.objects.filter(election=self, college=college).order_by("-votes"),
-                'blank_votes': self.blank_votes(college),
-                'total_votes': self.total_votes(college),
+                "candidates": Candidate.objects.filter(
+                    election=self, college=college
+                ).order_by("-votes"),
+                "blank_votes": self.blank_votes(college),
+                "total_votes": self.total_votes(college),
             }
         return colleges
 
@@ -90,29 +93,31 @@ class Election(models.Model):
         return user.infos.college
 
     def blank_votes(self, college):
-        total = self.votes.filter(college=college).count()*2
+        total = self.votes.filter(college=college).count() * 2
         for candidate in self.candidates.filter(college=college):
             total -= candidate.votes
         return total
 
     def total_votes(self, college=None):
         if college is not None:
-            return self.votes.filter(college=college).count()*2
-        return self.votes.count()*2
+            return self.votes.filter(college=college).count() * 2
+        return self.votes.count() * 2
 
     def total_voters(self):
         return self.votes.count()
 
     @property
     def participation_stats(self):
-        participation_stats = {c: 0 for c in CURSUS_ITEEM + CURSUS_CENTRALE}
+        participation_stats = {
+            c: 0 for c in CURSUS_ITEEM + CURSUS_CENTRALE + CURSUS_ENSCL
+        }
 
         total = 0
         for c in participation_stats.keys():
             count = self.votes.filter(user__infos__cursus=c).count()
             participation_stats[c] = count
             total += count
-        participation_stats['Autre'] = self.total_votes()//2 - total
+        participation_stats["Autre"] = self.total_votes() // 2 - total
 
         return participation_stats
 
@@ -121,17 +126,29 @@ class Election(models.Model):
 
 
 class Candidate(models.Model):
-
     class Meta:
         verbose_name = "Candidat"
-        #ordering = "college", "last_name"
+        # ordering = "college", "last_name"
 
-    election = models.ForeignKey(Election, related_name="candidates", on_delete=models.CASCADE)
+    election = models.ForeignKey(
+        Election, related_name="candidates", on_delete=models.CASCADE
+    )
     first_name = models.CharField(max_length=100, verbose_name="Prénom")
     last_name = models.CharField(max_length=100, verbose_name="Nom")
     cover_letter = models.TextField(verbose_name="Lettre de motivation")
-    college = models.CharField(max_length=10, choices=UserInfos.Colleges.choices, verbose_name="Collège électoral")
-    photo = ResizedImageField(size=[300, 300], quality=80, upload_to=FilePath.photo, force_format="JPEG", null=True, blank=True)
+    college = models.CharField(
+        max_length=10,
+        choices=UserInfos.Colleges.choices,
+        verbose_name="Collège électoral",
+    )
+    photo = ResizedImageField(
+        size=[300, 300],
+        quality=80,
+        upload_to=FilePath.photo,
+        force_format="JPEG",
+        null=True,
+        blank=True,
+    )
     votes = models.IntegerField(default=0)
 
     def __str__(self):
@@ -139,7 +156,6 @@ class Candidate(models.Model):
 
 
 class VoteUser(models.Model):
-
     class Meta:
         verbose_name = "Vote Elections CA"
 

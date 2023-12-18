@@ -8,14 +8,13 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils import timezone
 
-from cla_votes.const import CURSUS_CENTRALE, CURSUS_ITEEM
+from cla_votes.const import CURSUS_CENTRALE, CURSUS_ITEEM, CURSUS_ENSCL
 
 
 class FilePath:
-
     @classmethod
     def _path(cls, instance, pathlist, filename):
-        ext = filename.split('.')[-1]
+        ext = filename.split(".")[-1]
         filename = "%s-%s.%s" % (slugify(instance.name), uuid.uuid4(), ext)
         pathlist.append(filename)
         return os.path.join(*pathlist)
@@ -31,38 +30,46 @@ class FilePath:
     @classmethod
     def regulation(cls, instance, filename):
         pathlist = ["cla_bdx", "regulation"]
-        ext = filename.split('.')[-1]
+        ext = filename.split(".")[-1]
         filename = "%s-%s.%s" % ("reglement", uuid.uuid4(), ext)
         pathlist.append(filename)
         return os.path.join(*pathlist)
 
 
 class CampaignManager(models.Manager):
-
     def ongoing(self, type=None):
         if type is not None:
-            return self.filter(type=type, starts_on__lt=timezone.now(), ends_on__gt=timezone.now()).last()
-        return self.filter(starts_on__lt=timezone.now(), ends_on__gt=timezone.now()).last()
+            return self.filter(
+                type=type, starts_on__lt=timezone.now(), ends_on__gt=timezone.now()
+            ).last()
+        return self.filter(
+            starts_on__lt=timezone.now(), ends_on__gt=timezone.now()
+        ).last()
 
     def vote_ongoing(self, type=None):
         if type is not None:
-            return self.filter(type=type, vote__starts_on__lt=timezone.now(), vote__ends_on__gt=timezone.now()).last()
-        return self.filter(vote__starts_on__lt=timezone.now(), vote__ends_on__gt=timezone.now()).last()
+            return self.filter(
+                type=type,
+                vote__starts_on__lt=timezone.now(),
+                vote__ends_on__gt=timezone.now(),
+            ).last()
+        return self.filter(
+            vote__starts_on__lt=timezone.now(), vote__ends_on__gt=timezone.now()
+        ).last()
 
 
 class Campaign(models.Model):
-
     objects = CampaignManager()
 
     class Meta:
-        ordering = '-starts_on',
+        ordering = ("-starts_on",)
         verbose_name = "Campagne"
 
     class BDX(models.TextChoices):
-        BDA = 'bda', 'BDA'
-        BDE = 'bde', 'BDE'
-        BDI = 'bdi', 'BDI'
-        BDS = 'bds', 'BDS'
+        BDA = "bda", "BDA"
+        BDE = "bde", "BDE"
+        BDI = "bdi", "BDI"
+        BDS = "bds", "BDS"
 
     starts_on = models.DateTimeField(verbose_name="Début")
     ends_on = models.DateTimeField(verbose_name="Fin")
@@ -71,7 +78,7 @@ class Campaign(models.Model):
     @property
     def school_year(self):
         if 1 <= self.starts_on.month < 9:
-            return self.starts_on.year-1
+            return self.starts_on.year - 1
         return self.starts_on.year
 
     def should_display_lists(self):
@@ -92,16 +99,28 @@ class Campaign(models.Model):
 
     def can_user_vote(self, user: User):
         if self.type == Campaign.BDX.BDI:
-            if not user.infos.is_from_iteem():
-                return False
+            if user.infos.is_from_iteem():
+                return True
         if self.type == Campaign.BDX.BDE:
-            if not user.infos.is_from_centrale():
+            if user.infos.is_from_centrale():
+                return True
+        if self.type == Campaign.BDX.BDA:
+            checks = [
+                user.infos.is_from_centrale(),
+                user.infos.is_from_iteem(),
+            ]
+            if any(checks):
                 return False
-        if self.type in {Campaign.BDX.BDA, Campaign.BDX.BDS}:
-            if not user.infos.is_from_centrale() and not user.infos.is_from_iteem():
-                return False
+        if self.type == Campaign.BDX.BDS:
+            checks = [
+                user.infos.is_from_centrale(),
+                user.infos.is_from_iteem(),
+                user.infos.is_from_enscl(),
+            ]
+            if any(checks):
+                return True
 
-        return True
+        return False
 
     def did_user_vote(self, user: User):
         return self.vote.votes.filter(user=user).count() > 0
@@ -119,44 +138,56 @@ class Campaign(models.Model):
 
 
 class List(models.Model):
-
     class Meta:
         verbose_name = "Liste"
-        ordering = "name",
+        ordering = ("name",)
 
-    campaign = models.ForeignKey(Campaign, related_name="lists", on_delete=models.CASCADE)
+    campaign = models.ForeignKey(
+        Campaign, related_name="lists", on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=100, verbose_name="Nom")
-    logo = ResizedImageField(size=[500, 500], quality=90, upload_to=FilePath.logo, force_format="PNG", null=True, blank=True)
-    program = models.FileField(upload_to=FilePath.program, null=True, blank=True, verbose_name="Programme")
-    penality = models.FloatField(default=0, verbose_name="Pourcentage de voix de pénalité")
+    logo = ResizedImageField(
+        size=[500, 500],
+        quality=90,
+        upload_to=FilePath.logo,
+        force_format="PNG",
+        null=True,
+        blank=True,
+    )
+    program = models.FileField(
+        upload_to=FilePath.program, null=True, blank=True, verbose_name="Programme"
+    )
+    penality = models.FloatField(
+        default=0, verbose_name="Pourcentage de voix de pénalité"
+    )
     votes_binary = models.IntegerField(default=0)
 
     @property
     def votes_binary_final(self):
-        return self.votes_binary - math.ceil(self.campaign.vote.total_votes*self.penality*0.01)
+        return self.votes_binary - math.ceil(
+            self.campaign.vote.total_votes * self.penality * 0.01
+        )
 
     def vote_penality(self):
-        return math.ceil(self.campaign.vote.total_votes*self.penality*0.01)
+        return math.ceil(self.campaign.vote.total_votes * self.penality * 0.01)
 
     def __str__(self):
         return f"{self.name} - {self.campaign.type.upper()} {self.campaign.school_year}/{self.campaign.school_year+1}"
 
 
 class Vote(models.Model):
-
     class Meta:
         verbose_name = "Vote"
 
-    campaign = models.OneToOneField(Campaign, related_name="vote", on_delete=models.CASCADE)
+    campaign = models.OneToOneField(
+        Campaign, related_name="vote", on_delete=models.CASCADE
+    )
     starts_on = models.DateTimeField(verbose_name="Début")
     ends_on = models.DateTimeField(verbose_name="Fin")
     display_result_on = models.DateTimeField(verbose_name="Publication des résultats")
 
     def register_user(self, user: User):
-        VoteUser.objects.create(
-            vote=self,
-            user=user
-        )
+        VoteUser.objects.create(vote=self, user=user)
 
     @property
     def blank_votes(self):
@@ -184,19 +215,25 @@ class Vote(models.Model):
 
     @property
     def participation_stats(self):
-        participation_stats = {c: 0 for c in CURSUS_ITEEM+CURSUS_CENTRALE}
+        participation_stats = {}
 
-        if self.campaign.type in {Campaign.BDX.BDI}:
-            participation_stats = {c:0 for c in CURSUS_ITEEM}
-        if self.campaign.type in {Campaign.BDX.BDE}:
-            participation_stats = {c:0 for c in CURSUS_CENTRALE}
+        if self.campaign.type == Campaign.BDX.BDI:
+            participation_stats = {c: 0 for c in CURSUS_ITEEM}
+        if self.campaign.type == Campaign.BDX.BDE:
+            participation_stats = {c: 0 for c in CURSUS_CENTRALE}
+        if self.campaign.type == Campaign.BDX.BDA:
+            participation_stats = {c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM}
+        if self.campaign.type == Campaign.BDX.BDS:
+            participation_stats = {
+                c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM + CURSUS_ENSCL
+            }
 
         total = 0
         for c in participation_stats.keys():
             count = self.votes.filter(user__infos__cursus=c).count()
             participation_stats[c] = count
             total += count
-        participation_stats['Autre'] = self.total_votes - total
+        participation_stats["Autre"] = self.total_votes - total
 
         return participation_stats
 
@@ -205,7 +242,6 @@ class Vote(models.Model):
 
 
 class VoteUser(models.Model):
-
     class Meta:
         verbose_name = "Vote Campagne BDX"
 
@@ -219,14 +255,15 @@ class CampaignRegulationManager(models.Manager):
 
 
 class CampaignRegulation(models.Model):
-
     objects = CampaignRegulationManager()
 
     class Meta:
         verbose_name = "Règlement des campagnes"
 
     voted_on = models.DateField(verbose_name="Voté le")
-    file = models.FileField(upload_to=FilePath.regulation, null=True, blank=True, verbose_name="Fichier PDF")
+    file = models.FileField(
+        upload_to=FilePath.regulation, null=True, blank=True, verbose_name="Fichier PDF"
+    )
 
     @property
     def school_year(self):

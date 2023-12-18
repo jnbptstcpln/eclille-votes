@@ -18,7 +18,7 @@ CURSUS_CENTRALE = [
     "G3-GEC",
     "DD-EDHEC",
     "DD-INTERNATIONNAL",
-    "DIPLOME"
+    "DIPLOME",
 ]
 
 CURSUS_ITEEM = [
@@ -32,5 +32,13 @@ CURSUS_ITEEM = [
     "IE4'",
     "IE5",
     "IE5'",
-    "DIPLOME"
+    "DIPLOME",
+]
+
+CURSUS_ENSCL = [
+    "CH1",
+    "CH1P",
+    "CH2",
+    "CH2P",
+    "CH3",
 ]
