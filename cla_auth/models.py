@@ -37,7 +37,7 @@ class UserInfos(models.Model):
         return re.match(r"^IE\d.*", self.cursus)
 
     def is_from_enscl(self):
-        return re.match(r"^CH\d.*", self.cursus)
+        return re.match(r"^CH\d.*", self.cursus) or re.match(r"^CPI\d.*", self.cursus)
 
     @property
     def school(self):
