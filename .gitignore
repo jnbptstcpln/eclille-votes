@@ -3,3 +3,4 @@ settings.ini
 migrations
 /venv
 /static
+*.pyc
