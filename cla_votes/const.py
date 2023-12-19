@@ -36,6 +36,10 @@ CURSUS_ITEEM = [
 ]
 
 CURSUS_ENSCL = [
+    "CPI1",
+    "CPI1P",
+    "CPI2",
+    "CPI2P",
     "CH1",
     "CH1P",
     "CH2",
