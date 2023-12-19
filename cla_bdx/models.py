@@ -70,10 +70,12 @@ class Campaign(models.Model):
         BDE = "bde", "BDE"
         BDI = "bdi", "BDI"
         BDS = "bds", "BDS"
+        BDA_ENSCL = "bda_enscl", "BDA ENSCL"
+        BDE_ENSCL = "bde_enscl", "BDE ENSCL"
 
     starts_on = models.DateTimeField(verbose_name="Début")
     ends_on = models.DateTimeField(verbose_name="Fin")
-    type = models.CharField(max_length=3, choices=BDX.choices, verbose_name="Campagne")
+    type = models.CharField(max_length=16, choices=BDX.choices, verbose_name="Campagne")
 
     @property
     def school_year(self):
@@ -118,6 +120,9 @@ class Campaign(models.Model):
                 user.infos.is_from_enscl(),
             ]
             if any(checks):
+                return True
+        if self.type in {Campaign.BDX.BDA_ENSCL, Campaign.BDX.BDE_ENSCL}:
+            if user.infos.is_from_enscl():
                 return True
 
         return False
@@ -224,6 +229,10 @@ class Vote(models.Model):
         if self.campaign.type == Campaign.BDX.BDA:
             participation_stats = {c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM}
         if self.campaign.type == Campaign.BDX.BDS:
+            participation_stats = {
+                c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM + CURSUS_ENSCL
+            }
+        if self.campaign.type in {Campaign.BDX.BDA_ENSCL, Campaign.BDX.BDE_ENSCL}:
             participation_stats = {
                 c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM + CURSUS_ENSCL
             }
