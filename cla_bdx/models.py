@@ -233,9 +233,7 @@ class Vote(models.Model):
                 c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM + CURSUS_ENSCL
             }
         if self.campaign.type in {Campaign.BDX.BDA_ENSCL, Campaign.BDX.BDE_ENSCL}:
-            participation_stats = {
-                c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM + CURSUS_ENSCL
-            }
+            participation_stats = {c: 0 for c in CURSUS_ENSCL}
 
         total = 0
         for c in participation_stats.keys():
