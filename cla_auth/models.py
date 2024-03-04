@@ -28,7 +28,9 @@ class UserInfos(models.Model):
         IE3 = "ie3", "IE3"
         IE4 = "ie4", "IE4"
         IE5 = "ie5", "IE5"
-        ENSCL = "ENSCL", "ENSCL"
+        CH1 = "ch1", "CH1"
+        CH2 = "ch2", "CH2"
+        ENSCL = "ENSCL", "ENSCL"  # Deprecated
 
     def is_from_centrale(self):
         return re.match(r"^G\d.*", self.cursus)
@@ -56,27 +58,27 @@ class UserInfos(models.Model):
             {
                 self.School.CENTRALE: self.Colleges.G3,
                 self.School.ITEEM: self.Colleges.IE5,
-                self.School.ENSCL: self.Colleges.ENSCL,
+                self.School.ENSCL: self.Colleges.CH2,
             },
             {
                 self.School.CENTRALE: self.Colleges.G2,
                 self.School.ITEEM: self.Colleges.IE4,
-                self.School.ENSCL: self.Colleges.ENSCL,
+                self.School.ENSCL: self.Colleges.CH2,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
                 self.School.ITEEM: self.Colleges.IE3,
-                self.School.ENSCL: self.Colleges.ENSCL,
+                self.School.ENSCL: self.Colleges.CH1,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
                 self.School.ITEEM: self.Colleges.IE1_IE2,
-                self.School.ENSCL: self.Colleges.ENSCL,
+                self.School.ENSCL: self.Colleges.CH1,
             },
             {
-                self.School.CENTRALE: self.Colleges.G3,
+                self.School.CENTRALE: self.Colleges.G1,
                 self.School.ITEEM: self.Colleges.IE1_IE2,
-                self.School.ENSCL: self.Colleges.ENSCL,
+                self.School.ENSCL: self.Colleges.CH1,
             },
         ]
 
@@ -93,13 +95,41 @@ class UserInfos(models.Model):
 
     @property
     def college_before(self):
+        colleges = [
+            {
+                self.School.CENTRALE: self.Colleges.G3,
+                self.School.ITEEM: self.Colleges.IE5,
+                self.School.ENSCL: self.Colleges.CH2,
+            },
+            {
+                self.School.CENTRALE: self.Colleges.G2,
+                self.School.ITEEM: self.Colleges.IE4,
+                self.School.ENSCL: self.Colleges.CH2,
+            },
+            {
+                self.School.CENTRALE: self.Colleges.G1,
+                self.School.ITEEM: self.Colleges.IE3,
+                self.School.ENSCL: self.Colleges.CH1,
+            },
+            {
+                self.School.CENTRALE: self.Colleges.G1,
+                self.School.ITEEM: self.Colleges.IE1_IE2,
+                self.School.ENSCL: self.Colleges.CH1,
+            },
+            {
+                self.School.CENTRALE: self.Colleges.G1,
+                self.School.ITEEM: self.Colleges.IE1_IE2,
+                self.School.ENSCL: self.Colleges.CH1,
+            },
+        ]
+
         if self.promo <= current_school_year():
-            return self.Colleges.G3 if self.is_from_centrale() else self.Colleges.IE5
+            return colleges[0].get(self.school)
         elif self.promo == current_school_year() + 1:
-            return self.Colleges.G2 if self.is_from_centrale() else self.Colleges.IE4
+            return colleges[1].get(self.school)
         elif self.promo == current_school_year() + 2:
-            return self.Colleges.G1 if self.is_from_centrale() else self.Colleges.IE3
+            return colleges[2].get(self.school)
         elif self.promo == current_school_year() + 3:
-            return self.Colleges.IE1_IE2
+            return colleges[3].get(self.school)
         elif self.promo == current_school_year() + 4:
-            return self.Colleges.IE1_IE2
+            return colleges[4].get(self.school)
