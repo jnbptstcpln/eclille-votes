@@ -1,0 +1,5 @@
+# Common
+-r requirements.txt
+# Stubs
+django-stubs[compatible-mypy]
+types-python-dateutil

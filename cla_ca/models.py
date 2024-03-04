@@ -7,12 +7,11 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils import timezone
 
-from cla_votes.const import CURSUS_CENTRALE, CURSUS_ITEEM
+from cla_votes.const import CURSUS_CENTRALE, CURSUS_ITEEM, CURSUS_ENSCL
 from cla_auth.models import UserInfos
 
 
 class FilePath:
-
     @classmethod
     def _path(cls, instance, pathlist, filename):
         ext = filename.split(".")[-1]
@@ -30,7 +29,6 @@ class FilePath:
 
 
 class ElectionManager(models.Manager):
-
     def ongoing(self):
         return self.filter(
             starts_on__lt=timezone.now(), ends_on__gt=timezone.now()
@@ -38,7 +36,6 @@ class ElectionManager(models.Manager):
 
 
 class Election(models.Model):
-
     objects = ElectionManager()
 
     class Meta:
@@ -111,7 +108,9 @@ class Election(models.Model):
 
     @property
     def participation_stats(self):
-        participation_stats = {c: 0 for c in CURSUS_ITEEM + CURSUS_CENTRALE}
+        participation_stats = {
+            c: 0 for c in CURSUS_ITEEM + CURSUS_CENTRALE + CURSUS_ENSCL
+        }
 
         total = 0
         for c in participation_stats.keys():
@@ -127,7 +126,6 @@ class Election(models.Model):
 
 
 class Candidate(models.Model):
-
     class Meta:
         verbose_name = "Candidat"
         # ordering = "college", "last_name"
@@ -158,7 +156,6 @@ class Candidate(models.Model):
 
 
 class VoteUser(models.Model):
-
     class Meta:
         verbose_name = "Vote Elections CA"
 
