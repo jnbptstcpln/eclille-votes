@@ -145,7 +145,7 @@ class VoteUser(models.Model):
         ordering = ("user__last_name",)
 
     vote = models.ForeignKey(Election, related_name="votes", on_delete=models.CASCADE)
-    college = models.CharField(max_length=10, choices=UserInfos.Colleges.choices)
+    college = models.CharField(max_length=16, choices=UserInfos.Colleges.choices)
     user = models.ForeignKey(
         User, related_name="votes_custom", on_delete=models.CASCADE
     )

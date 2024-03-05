@@ -137,7 +137,7 @@ class Candidate(models.Model):
     last_name = models.CharField(max_length=100, verbose_name="Nom")
     cover_letter = models.TextField(verbose_name="Lettre de motivation")
     college = models.CharField(
-        max_length=10,
+        max_length=16,
         choices=UserInfos.Colleges.choices,
         verbose_name="Collège électoral",
     )
@@ -160,6 +160,6 @@ class VoteUser(models.Model):
         verbose_name = "Vote Elections CA"
 
     vote = models.ForeignKey(Election, related_name="votes", on_delete=models.CASCADE)
-    college = models.CharField(max_length=10, choices=UserInfos.Colleges.choices)
+    college = models.CharField(max_length=16, choices=UserInfos.Colleges.choices)
     user = models.ForeignKey(User, related_name="votes_ca", on_delete=models.CASCADE)
     voted_on = models.DateTimeField(auto_now=True, null=True)
