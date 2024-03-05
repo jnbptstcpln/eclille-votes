@@ -24,13 +24,16 @@ class UserInfos(models.Model):
         G1 = "g1", "G1"
         G2 = "g2", "G2"
         G3 = "g3", "G3"
-        IE1_IE2 = "ie1/ie2", "IE1/IE2"
-        IE3 = "ie3", "IE3"
-        IE4 = "ie4", "IE4"
-        IE5 = "ie5", "IE5"
+        IE1 = "ie1"
+        IE2 = "ie2"
+        IE3_IE4_IE5 = "ie3/ie4/ie5", "IE3/IE4/IE5"
         CH1 = "ch1", "CH1"
         CH2 = "ch2", "CH2"
         ENSCL = "ENSCL", "ENSCL"  # Deprecated
+        IE1_IE2 = "ie1/ie2", "IE1/IE2"  # Deprecated
+        IE3 = "ie3", "IE3"  # Deprecated
+        IE4 = "ie4", "IE4"  # Deprecated
+        IE5 = "ie5", "IE5"  # Deprecated
 
     def is_from_centrale(self):
         return re.match(r"^G\d.*", self.cursus)
@@ -57,27 +60,27 @@ class UserInfos(models.Model):
         colleges = [
             {
                 self.School.CENTRALE: self.Colleges.G3,
-                self.School.ITEEM: self.Colleges.IE5,
+                self.School.ITEEM: self.Colleges.IE3_IE4_IE5,
                 self.School.ENSCL: self.Colleges.CH2,
             },
             {
                 self.School.CENTRALE: self.Colleges.G2,
-                self.School.ITEEM: self.Colleges.IE4,
+                self.School.ITEEM: self.Colleges.IE3_IE4_IE5,
                 self.School.ENSCL: self.Colleges.CH2,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
-                self.School.ITEEM: self.Colleges.IE3,
+                self.School.ITEEM: self.Colleges.IE3_IE4_IE5,
                 self.School.ENSCL: self.Colleges.CH1,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
-                self.School.ITEEM: self.Colleges.IE1_IE2,
+                self.School.ITEEM: self.Colleges.IE2,
                 self.School.ENSCL: self.Colleges.CH1,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
-                self.School.ITEEM: self.Colleges.IE1_IE2,
+                self.School.ITEEM: self.Colleges.IE1,
                 self.School.ENSCL: self.Colleges.CH1,
             },
         ]
@@ -98,27 +101,27 @@ class UserInfos(models.Model):
         colleges = [
             {
                 self.School.CENTRALE: self.Colleges.G3,
-                self.School.ITEEM: self.Colleges.IE5,
+                self.School.ITEEM: self.Colleges.IE3_IE4_IE5,
                 self.School.ENSCL: self.Colleges.CH2,
             },
             {
                 self.School.CENTRALE: self.Colleges.G2,
-                self.School.ITEEM: self.Colleges.IE4,
+                self.School.ITEEM: self.Colleges.IE3_IE4_IE5,
                 self.School.ENSCL: self.Colleges.CH2,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
-                self.School.ITEEM: self.Colleges.IE3,
+                self.School.ITEEM: self.Colleges.IE3_IE4_IE5,
                 self.School.ENSCL: self.Colleges.CH1,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
-                self.School.ITEEM: self.Colleges.IE1_IE2,
+                self.School.ITEEM: self.Colleges.IE2,
                 self.School.ENSCL: self.Colleges.CH1,
             },
             {
                 self.School.CENTRALE: self.Colleges.G1,
-                self.School.ITEEM: self.Colleges.IE1_IE2,
+                self.School.ITEEM: self.Colleges.IE1,
                 self.School.ENSCL: self.Colleges.CH1,
             },
         ]
