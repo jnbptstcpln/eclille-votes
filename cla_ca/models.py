@@ -65,6 +65,8 @@ class Election(models.Model):
     def candidates_by_colleges(self):
         colleges = {}
         for college in UserInfos.Colleges.values:
+            if college in UserInfos.DEPRECATED_COLLEGES:
+                continue
             colleges[college] = {
                 "candidates": Candidate.objects.filter(
                     election=self, college=college
@@ -78,6 +80,8 @@ class Election(models.Model):
     def candidates_by_colleges_result(self):
         colleges = {}
         for college in UserInfos.Colleges.values:
+            if college in UserInfos.DEPRECATED_COLLEGES:
+                continue
             colleges[college] = {
                 "candidates": Candidate.objects.filter(
                     election=self, college=college

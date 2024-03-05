@@ -35,6 +35,8 @@ class UserInfos(models.Model):
         IE4 = "ie4", "IE4"  # Deprecated
         IE5 = "ie5", "IE5"  # Deprecated
 
+    DEPRECATED_COLLEGES = ["ENSCL", "ie1/ie2", "ie3", "ie4", "ie5"]
+
     def is_from_centrale(self):
         return re.match(r"^G\d.*", self.cursus)
 
