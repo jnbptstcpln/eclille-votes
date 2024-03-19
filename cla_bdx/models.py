@@ -110,9 +110,10 @@ class Campaign(models.Model):
             checks = [
                 user.infos.is_from_centrale(),
                 user.infos.is_from_iteem(),
+                user.infos.is_from_enscl(),
             ]
             if any(checks):
-                return False
+                return True
         if self.type == Campaign.BDX.BDS:
             checks = [
                 user.infos.is_from_centrale(),
@@ -227,7 +228,9 @@ class Vote(models.Model):
         if self.campaign.type == Campaign.BDX.BDE:
             participation_stats = {c: 0 for c in CURSUS_CENTRALE}
         if self.campaign.type == Campaign.BDX.BDA:
-            participation_stats = {c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM}
+            participation_stats = {
+                c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM + CURSUS_ENSCL
+            }
         if self.campaign.type == Campaign.BDX.BDS:
             participation_stats = {
                 c: 0 for c in CURSUS_CENTRALE + CURSUS_ITEEM + CURSUS_ENSCL
