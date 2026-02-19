@@ -29,14 +29,27 @@ class ElectionVoteView(AbstractCaView):
             return self.render_already_vote(election)
 
         college = election.get_computed_user_college(req.user)
-        form = CaVoteForm(candidates=election.candidates.filter(college=college))
+        candidates = election.candidates.filter(college=college)
+        if election.vote_mode == Election.VOTE_MODE_CONDORCET:
+            form = CaCondorcetVoteForm(candidates=candidates)
+        else:
+            form = CaVoteForm(candidates=candidates)
+
+        condorcet_fields = None
+        if election.vote_mode == Election.VOTE_MODE_CONDORCET:
+            condorcet_fields = {
+                candidate.pk: form[f"rank_{candidate.pk}"]
+                for candidate in candidates
+            }
 
         return render(
             req,
             "cla_ca/member/vote.html",
             self.context({
                 'election': election,
-                'form': form
+                'form': form,
+                'voting_college': college,
+                'condorcet_fields': condorcet_fields,
             })
         )
 
@@ -49,9 +62,35 @@ class ElectionVoteView(AbstractCaView):
             return self.render_already_vote(election)
 
         college = election.get_computed_user_college(req.user)
-        form = CaVoteForm(req.POST, candidates=election.candidates.filter(college=college))
+        candidates = election.candidates.filter(college=college)
+        if election.vote_mode == Election.VOTE_MODE_CONDORCET:
+            form = CaCondorcetVoteForm(req.POST, candidates=candidates)
+        else:
+            form = CaVoteForm(req.POST, candidates=candidates)
+
+        condorcet_fields = None
+        if election.vote_mode == Election.VOTE_MODE_CONDORCET:
+            condorcet_fields = {
+                candidate.pk: form[f"rank_{candidate.pk}"]
+                for candidate in candidates
+            }
 
         if form.is_valid():
+
+            if election.vote_mode == Election.VOTE_MODE_CONDORCET:
+                ranked_candidates = form.get_ranked_candidates()
+                CondorcetBallot.objects.create(
+                    election=election,
+                    college=college,
+                    user=req.user,
+                    ranked_candidates=ranked_candidates,
+                )
+
+                return render(
+                    req,
+                    "cla_ca/member/did_vote.html",
+                    self.context({'election': election})
+                )
 
             candidate1_index = int(form.cleaned_data['vote1'])
             candidate2_index = int(form.cleaned_data['vote2'])
@@ -96,7 +135,9 @@ class ElectionVoteView(AbstractCaView):
             self.context({
                 'election': election,
                 'form': form,
-                'scroll': True
+                'scroll': True,
+                'voting_college': college,
+                'condorcet_fields': condorcet_fields,
             })
         )
 
