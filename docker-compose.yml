@@ -1,0 +1,48 @@
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: cla_votes
+      MYSQL_USER: cla_votes
+      MYSQL_PASSWORD: cla_votes_pwd
+      MYSQL_ROOT_PASSWORD: root_pwd
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "cla_votes", "-pcla_votes_pwd"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: python manage.py runserver 0.0.0.0:8000 --noreload
+    environment:
+      DJANGO_SETTINGS_MODULE: "cla_votes.settings.development"
+      SECRET_KEY: "dev_secret_key_change_me"
+      ALLOWED_HOSTS: "127.0.0.1,localhost"
+
+      DATABASE_HOST: "db"
+      DATABASE_PORT: "3306"
+      DATABASE_USER: "cla_votes"
+      DATABASE_PASSWORD: "cla_votes_pwd"
+      DATABASE_NAME: "cla_votes"
+
+      EMAIL_HOST: "localhost"
+      EMAIL_LOGIN: "dev"
+      EMAIL_PASSWORD: "dev"
+      CLA_AUTH_HOST: "localhost:8000"
+      CLA_AUTH_IDENTIFIER: "dev"
+
+      DEV_BYPASS_AUTH: "1"
+
+volumes:
+  db_data:

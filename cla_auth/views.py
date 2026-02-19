@@ -1,4 +1,5 @@
 import requests
+import os
 
 from django.views.generic import View
 from django.shortcuts import render, redirect, reverse
@@ -23,10 +24,40 @@ class LoginAuthView(AbstractAuthView):
 
         if req.user.is_authenticated:
             return redirect(req.session.get("next", reverse("cla_public:index")))
+        
+        # ======================================================
+        # DEV MODE — bypass total du CAS
+        # ======================================================
+        if os.environ.get("DEV_BYPASS_AUTH") == "1":
+            user, _ = User.objects.get_or_create(
+                username="dev",
+                defaults={
+                    "first_name": "Dev",
+                    "last_name": "Local",
+                    "email": "dev@localhost",
+                    "is_staff": True,
+                    "is_superuser": True,
+                    "is_active": True,
+                },
+            )
 
-        # Redirect to CLA
+            UserInfos.objects.get_or_create(
+                user=user,
+                defaults={
+                    "promo": 2026,
+                    "cursus": "iteem",
+                },
+            )
+
+            login(req, user)
+            return redirect(req.session.get("next", reverse("cla_public:index")))
+
+        # ======================================================
+        # PROD — vrai CAS
+        # ======================================================
         cla_auth_url = "https://{}/authentification/{}".format(
-            settings.CLA_AUTH_HOST, settings.CLA_AUTH_IDENTIFIER
+            settings.CLA_AUTH_HOST,
+            settings.CLA_AUTH_IDENTIFIER,
         )
 
         return redirect(cla_auth_url)
