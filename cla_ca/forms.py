@@ -28,6 +28,12 @@ class CaVoteForm(forms.Form):
 
 class CaCondorcetVoteForm(forms.Form):
 
+    blank_vote = forms.BooleanField(
+        label="Je vote blanc (ne classer aucun candidat)",
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'blank_vote_checkbox'})
+    )
+
     def __init__(self, *args, **kwargs):
         candidates = list(kwargs.pop('candidates'))
         super().__init__(*args, **kwargs)
@@ -42,20 +48,24 @@ class CaCondorcetVoteForm(forms.Form):
                 label=f"Classement - {candidate.first_name} {candidate.last_name}",
                 required=False,
                 choices=rank_choices,
-                widget=forms.Select(attrs={'class': 'form-control'}),
+                widget=forms.Select(attrs={'class': 'form-control rank-field'}),
             )
 
         self._ranked_candidates = []
 
     def clean(self):
         cleaned = super().clean()
+        blank_vote = cleaned.get('blank_vote', False)
         used_ranks = {}
+        ranked_count = 0
 
         for candidate in self.candidates:
             field_name = f"rank_{candidate.pk}"
             value = cleaned.get(field_name)
             if not value:
                 continue
+
+            ranked_count += 1
 
             try:
                 rank = int(value)
@@ -72,6 +82,19 @@ class CaCondorcetVoteForm(forms.Form):
                 continue
 
             used_ranks[rank] = candidate.pk
+
+        # Validation : soit vote blanc sans classement, soit tous les candidats classés
+        if blank_vote and ranked_count > 0:
+            self.add_error('blank_vote', "Vous ne pouvez pas voter blanc et classer des candidats en même temps.")
+        elif not blank_vote and ranked_count > 0 and ranked_count < len(self.candidates):
+            raise forms.ValidationError(
+                f"Vous devez classer tous les candidats ({len(self.candidates)}) ou voter blanc. "
+                f"Vous avez classé {ranked_count} candidat(s)."
+            )
+        elif not blank_vote and ranked_count == 0:
+            raise forms.ValidationError(
+                "Vous devez soit classer tous les candidats, soit cocher la case \"Vote blanc\"."
+            )
 
         self._ranked_candidates = [
             used_ranks[rank] for rank in sorted(used_ranks.keys())
