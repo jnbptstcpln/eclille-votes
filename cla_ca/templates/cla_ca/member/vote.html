@@ -1,5 +1,9 @@
-{% extends "layout/base.html" %} {% load cla_ca_extras %} {% block page_title
-%}{{ election }} : Voter{% endblock %} {% block content %}
+{% extends "layout/base.html" %} 
+{% load cla_ca_extras %} 
+{% block page_title%}
+{{ election }} : Voter
+{% endblock %} 
+{% block content %}
 <div class="p-2 mt-2 container">
   <div class="card">
     <div class="card-body">
@@ -29,7 +33,8 @@
           Vous avez à votre disposition 2 votes<br />
           à donner à deux candidats différents.
         </p>
-        {% endif %} {% for college, college_vote in
+        {% endif %} 
+        {% for college, college_vote in
         election.candidates_by_colleges.items %}
         <h4 class="header-2" style="margin: 2rem 0 1rem">
           Collège {{ college|upper }}
@@ -74,9 +79,12 @@
               {{ candidate.cover_letter|linebreaks }}
             </div>
 
-            {% if election.vote_mode == "condorcet" %} {% if college ==
-            voting_college %} {% with
-            rank_field=condorcet_fields|get_item:candidate.pk %} {% if
+            {% if election.vote_mode == "condorcet" %} 
+            {% if college ==
+            voting_college %} 
+            {% with
+            rank_field=condorcet_fields|get_item:candidate.pk %} 
+            {% if
             rank_field %}
             <div
               class="form-group mt-3{% if rank_field.errors %} is-invalid{% endif %}"
@@ -96,21 +104,29 @@
                   <li>{{ error|escape }}</li>
                   {% endfor %}
                 </ul>
-                {% else %} {{ rank_field.errors.0|escape }} {% endif %}
+                {% else %} 
+                {{ rank_field.errors.0|escape }} 
+                {% endif %}
               </div>
-              {% endif %} {{ rank_field }}
+              {% endif %} 
+              {{ rank_field }}
             </div>
-            {% endif %} {% endwith %} {% endif %} {% endif %}
+            {% endif %} 
+            {% endwith %} 
+            {% endif %} 
+            {% endif %}
           </div>
         </div>
 
         {% if not forloop.last %}
         <hr />
-        {% endif %} {% empty %}
+        {% endif %} 
+        {% empty %}
         <p class="text-center" style="color: #707070">
           Aucun candidat ne s'est présenté au sein de ce collège cette année...
         </p>
-        {% endfor %} {% endfor %}
+        {% endfor %} 
+        {% endfor %}
 
         <hr />
 
@@ -123,7 +139,8 @@
             </div>
             {% endfor %}
           </div>
-          {% endif %} {% if election.vote_mode == "condorcet" %}
+          {% endif %} 
+          {% if election.vote_mode == "condorcet" %}
           <div class="form-group mb-4">
             <div class="custom-control custom-checkbox">
               {{ form.blank_vote }}
@@ -154,7 +171,10 @@
             <div>{{ error|escape }}</div>
             {% endfor %}
           </div>
-          {% endif %} {% endif %} {% if election.vote_mode != "condorcet" %} {%
+          {% endif %} 
+          {% endif %} 
+          {% if election.vote_mode != "condorcet" %} 
+          {%
           for field in form %}
           <div class="form-group{% if field.errors %} is-invalid{% endif %}">
             <label for="{{ field.id_for_label }}" style="font-weight: 600">
@@ -169,13 +189,18 @@
                 <li>{{ error|escape }}</li>
                 {% endfor %}
               </ul>
-              {% else %} {{ field.errors.0|escape }} {% endif %}
+              {% else %} 
+              {{ field.errors.0|escape }} 
+              {% endif %}
             </div>
-            {% endif %} {{ field }} {% if field.help_text %}
+            {% endif %} 
+            {{ field }} 
+            {% if field.help_text %}
             <p class="help">{{ field.help_text|safe }}</p>
             {% endif %}
           </div>
-          {% endfor %} {% endif %}
+          {% endfor %} 
+          {% endif %}
 
           <p>
             En cliquant sur "Voter", vous confirmez votre vote, sur lequel vous
