@@ -149,12 +149,33 @@ class Election(models.Model):
                     counts.append(pairs.get((row_id, col_id), 0))
             rows.append({"candidate": candidates[row_index], "counts": counts})
 
+        ranking = self._compute_condorcet_ranking(pairs, candidate_ids, candidates)
+
         return {
             "winner": winner,
             "columns": candidates,
             "rows": rows,
+            "ranking": ranking,
             "raw": result_payload,
         }
+
+    def _compute_condorcet_ranking(self, pairs, candidate_ids, candidates):
+        candidate_map = {str(candidate.pk): candidate for candidate in candidates}
+        scores = {}
+        for cand_id in candidate_ids:
+            wins = 0
+            for other_id in candidate_ids:
+                if cand_id != other_id:
+                    if pairs.get((cand_id, other_id), 0) > pairs.get((other_id, cand_id), 0):
+                        wins += 1
+            scores[cand_id] = wins
+        
+        sorted_candidates = sorted(
+            [(candidate_map[cand_id], scores[cand_id]) for cand_id in candidate_ids],
+            key=lambda x: x[1],
+            reverse=True
+        )
+        return sorted_candidates
 
     @property
     def condorcet_results_by_college(self):
