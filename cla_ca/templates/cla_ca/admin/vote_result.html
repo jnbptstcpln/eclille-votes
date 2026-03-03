@@ -2,102 +2,92 @@
   <div style="max-width: 800px">
     <h3 style="margin-bottom: 1rem">{{ election }}</h3>
 
-    {% if election.vote_mode == "condorcet" %} {% for college, college_result in
-    election.condorcet_results_by_college.items %}
-    <h4 style="margin-bottom: 0.5rem">Collège {{ college|upper }}</h4>
+    {% if election.vote_mode == "condorcet" %}
 
-    {% if college_result.error %}
-    <p style="color: #a33; margin-bottom: 2rem">{{ college_result.error }}</p>
+      {% for college, college_result in election.condorcet_results_by_college.items %}
+        <h4 style="margin-bottom: 0.5rem">Collège {{ college|upper }}</h4>
+
+        {% if college_result.error %}
+          <p style="color: #a33; margin-bottom: 2rem">{{ college_result.error }}</p>
+        {% else %}
+          <p style="margin-bottom: 0.5rem">
+            Bulletins: {{ college_result.ballots }}
+            {% if college_result.result.winner %}
+              — Gagnant: <strong>{{ college_result.result.winner }}</strong>
+            {% endif %}
+          </p>
+
+          {% if college_result.result.ranked %}
+          <div style="background: #f9f9f9; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem">
+            <strong>Classement :</strong>
+            {% for item in college_result.result.ranked %}{{ item.candidate }} ({{ item.wins }}){% if not forloop.last %} • {% endif %}{% endfor %}
+          </div>
+          {% endif %}
+
+          <table style="width: 100%; margin-bottom: 2rem">
+            <thead>
+              <tr>
+                <th></th>
+                {% for candidate in college_result.result.columns %}
+                  <th>{{ candidate }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in college_result.result.rows %}
+                <tr>
+                  <th>{{ row.candidate }}</th>
+                  {% for count in row.counts %}
+                    <td>{% if count is not None %}{{ count }}{% else %}-{% endif %}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+
+      {% endfor %}
+
     {% else %}
-    <p style="margin-bottom: 0.5rem">
-      Bulletins: {{ college_result.ballots }} {% if college_result.result.winner
-      %} — Gagnant: <strong>{{ college_result.result.winner }}</strong>
-      {% endif %}
-    </p>
 
-    <!-- Classement des candidats -->
-    {% if college_result.result.ranked %}
-    <div
-      style="
-        background: #f9f9f9;
-        padding: 1rem;
-        border-radius: 5px;
-        margin-bottom: 1.5rem;
-      "
-    >
-      <h5 style="margin-top: 0">Classement (par nombre de duels gagnés)</h5>
-      <ol style="margin-bottom: 0">
-        {% for item in college_result.result.ranked %}
-        <li>
-          <strong>{{ item.candidate }}</strong>
-          <span style="color: #666; font-size: 0.9em"
-            >({{ item.wins }} duels gagnés)</span
-          >
-        </li>
-        {% endfor %}
-      </ol>
-    </div>
+      {% for college, college_vote in election.candidates_by_colleges_result.items %}
+        <h4 style="margin-bottom: 1rem">Collège {{ college|upper }}</h4>
+
+        <table style="width: 100%; margin-bottom: 2rem">
+          <thead>
+            <tr>
+              <th>Candidat</th>
+              <th>Nombre de votes</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for candidate in college_vote.candidates %}
+              <tr>
+                <th>{{ candidate }}</th>
+                <td>{{ candidate.votes }}</td>
+              </tr>
+            {% endfor %}
+            <tr>
+              <th>Vote blancs</th>
+              <td>{{ college_vote.blank_votes }}</td>
+            </tr>
+          </tbody>
+
+          <tfoot>
+            <tr>
+              <th>Total</th>
+              <th>{{ college_vote.total_votes }}</th>
+            </tr>
+          </tfoot>
+        </table>
+      {% endfor %}
+
     {% endif %}
 
-    <!-- Explication du tableau -->
-    <p style="font-size: 0.9em; color: #666; margin-bottom: 1rem">
-      <strong>Tableau des duels :</strong> Chaque case indique combien de fois
-      le candidat de la ligne a remporté le duel face au candidat de la colonne.
-    </p>
-
-    <table style="width: 100%; margin-bottom: 2rem; border-collapse: collapse">
-      <thead>
-        <tr style="background: #f5f5f5">
-          <th
-            style="padding: 0.5rem; text-align: left; border: 1px solid #ddd"
-          ></th>
-          {% for candidate in college_result.result.columns %}
-          <th
-            style="
-              padding: 0.5rem;
-              text-align: center;
-              border: 1px solid #ddd;
-              font-size: 0.85em;
-            "
-          >
-            {{ candidate }}
-          </th>
-          {% endfor %}
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for row in college_result.result.rows %}
-        <tr>
-          <th style="padding: 0.5rem; text-align: left; border: 1px solid #ddd">
-            {{ row.candidate }}
-          </th>
-          {% for count in row.counts %}
-          <td
-            style="padding: 0.5rem; text-align: center; border: 1px solid #ddd; {% if count is not None and count > 0 %}background: #e3f2fd{% endif %}"
-          >
-            {% if count is not None %}{{ count }}{% else %}-{% endif %}
-          </td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% endif %} {% endfor %} {% else %} {% for college, college_vote in
-    election.candidates_by_colleges_result.items %}
-    <h4 style="margin-bottom: 1rem">Collège {{ college|upper }}</h4>
-
-    <table style="width: 100%; margin-bottom: 2rem">
-      <thead>
-        <tr>
-          <th>Candidat</th>
-          <th>Nombre de votes</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for candidate in college_vote.candidates %}
-        <tr>
+  </div>
+</div>
           <th>{{ candidate }}</th>
           <td>{{ candidate.votes }}</td>
         </tr>
