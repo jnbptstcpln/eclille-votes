@@ -140,37 +140,19 @@ class Election(models.Model):
 
         pairs = result_payload.get("pairs", {})
         rows = []
-        candidate_scores = []
-        
         for row_index, row_id in enumerate(candidate_ids):
             counts = []
-            wins = 0
-            losses = 0
-            
             for col_id in candidate_ids:
                 if row_id == col_id:
                     counts.append(None)
                 else:
-                    votes = pairs.get((row_id, col_id), 0)
-                    counts.append(votes)
-                    opposite_votes = pairs.get((col_id, row_id), 0)
-                    if votes > opposite_votes:
-                        wins += 1
-                    elif votes < opposite_votes:
-                        losses += 1
-            
-            row_data = {"candidate": candidates[row_index], "counts": counts, "wins": wins}
-            rows.append(row_data)
-            candidate_scores.append({"candidate": candidates[row_index], "wins": wins, "index": row_index})
-        
-        # Tri par nombre de victoires décroissants
-        ranked = sorted(candidate_scores, key=lambda x: x["wins"], reverse=True)
+                    counts.append(pairs.get((row_id, col_id), 0))
+            rows.append({"candidate": candidates[row_index], "counts": counts})
 
         return {
             "winner": winner,
             "columns": candidates,
             "rows": rows,
-            "ranked": ranked,
             "raw": result_payload,
         }
 
